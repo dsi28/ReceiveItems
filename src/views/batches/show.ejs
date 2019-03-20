@@ -7,3 +7,11 @@
 <form method='POST' action='/batches/<%=batch.id%>?_method=DELETE'>
     <input type='submit' value='Delete'>
 </form>
+<h2>Items</h2>
+<a href='/batches/<%=batch.id%>/items/new'>New Item</a>
+<%batch.items.forEach((item)=>{%>
+    <h4><%=item.erpId%></h4>
+    <p><%=item.addQuantity%></p>
+    <a href='/batches/<%=batch.id%>/items/<%=item.id%>/edit'>Edit</a>
+    <hr>
+<%})%>

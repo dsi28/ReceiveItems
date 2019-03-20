@@ -8,7 +8,8 @@ methodOverride = require('method-override'),
 expressSanitizer = require('express-sanitizer');
 
 //route files
-const batchRoutes = require('./routes/batch');
+const batchRoutes = require('./routes/batch'),
+itemRoutes = require('./routes/item');
 
 
 //app config
@@ -24,6 +25,7 @@ app.get('/', (req, res)=>{
 });
 
 app.use('/batches', batchRoutes);
+app.use('/batches/:id/items', itemRoutes);
 
 
 app.listen(3000,()=>{console.log('App is alive...')})

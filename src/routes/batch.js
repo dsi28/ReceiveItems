@@ -57,7 +57,7 @@ router.put('/:id', (req,res)=>{
 });
 
 router.get('/:id', (req,res)=>{
-    Batch.findById(req.params.id, (err,foundBatch)=>{
+    Batch.findById(req.params.id).populate('items').exec((err,foundBatch)=>{
         if(err){
             console.log(err);
             res.redirect('back');

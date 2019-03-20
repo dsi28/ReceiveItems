@@ -1,0 +1,9 @@
+<h1>Batches Show</h1>
+<a href='/batches'>All Batches</a>
+
+<h3><%=batch.name%></h3>
+<h3><%=batch.createdDate%></h3>
+<a href='/batches/<%=batch.id%>/edit'>Edit</a>
+<form method='POST' action='/batches/<%=batch.id%>?_method=DELETE'>
+    <input type='submit' value='Delete'>
+</form>

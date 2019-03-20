@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const batchSchema = new mongoose.Schema({
-    bId: String,
+    name: String,
     createdDate: {
-        default: Date.now(),
+        default: Date.now,
         type: Date
     },
     createdBy: {

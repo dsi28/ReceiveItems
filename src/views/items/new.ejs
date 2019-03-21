@@ -1,12 +1,12 @@
 <h1>New Item For <%=batch.name%></h1>
 <a href='/batches'>All Batches</a>
 <hr>
-<form method='POST' action='/batches/<%=batch.id%>/items'>
+<form method='POST' action='/batches/<%=batch.id%>/items' enctype='multipart/form-data'>
     <label for='erpId'>Item ERP ID</label>
     <input type='text' name='item[erpId]' id='erpId'>
     <label for='qty'>Quantity Recieved</label>
     <input type='text' name='item[addQuantity]' id='qty'>
     <label for='image'>Image</label>
-    <input type='text' name='item[image]' id='image'>
+    <input type='file' name='image' id='image' accept='images/*'>
     <input type='submit' value='Create'>
 </form>

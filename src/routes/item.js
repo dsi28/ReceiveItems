@@ -1,7 +1,19 @@
 const express = require('express'),
 router = express.Router({mergeParams: true}),
 Batch = require('../models/batch'),
-Item = require('../models/item');
+Item = require('../models/item'),
+multer = require('multer');
+
+//multer config
+const multerStorageConfig = multer.diskStorage({
+    destination: (req,file,cb)=>{
+        cb(null, 'public/images/');
+    },
+    filename: (req,file,cb)=>{
+        cb(null, Date.now()+'-'+ file.originalname)
+    }
+});
+const upload = multer({storage: multerStorageConfig});
 
     // routes for :   /batches/:id/items
 
@@ -11,7 +23,14 @@ router.get('/new', (req,res)=>{
     })
 });
 
-router.post('/', (req,res)=>{
+router.post('/', upload.single('image'), (req,res)=>{
+    if(req.file){
+        req.body.item.image = '\\'+ req.file.path;
+    }
+    //console.log(req.body);
+    // console.log(req.file)
+    // console.log(req.file.filename);
+    // console.log(req.file.path);
     Item.create(req.body.item, (err, createdItem)=>{
         Batch.findById(req.params.id, (err,foundBatch)=>{
             foundBatch.items.push(createdItem);

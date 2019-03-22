@@ -33,7 +33,7 @@ middleware.DeleteImage = (req,res,next)=>{
                         }
                     });
                 }
-            })
+            });
         }else{
             next();
         }

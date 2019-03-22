@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const itemSchema = new mongoose.Schema({
     erpId: String,
     addQuantity: Number,
-    image: String
+    imageLocation: String,
+    imageDisplay: String
 });
 
 module.exports = mongoose.model('Item', itemSchema);

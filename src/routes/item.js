@@ -25,7 +25,9 @@ router.get('/new', (req,res)=>{
 
 router.post('/', upload.single('image'), (req,res)=>{
     if(req.file){
-        req.body.item.image = '\\'+ req.file.path;
+        req.body.item.imageLocation = '\\'+ req.file.path;
+        req.body.item.imageDisplay = req.file.path.replace('public', '');
+        console.log('loc: '+ req.body.item.imageLocation + 'dis: '+ req.body.item.imageDisplay);
     }
     //console.log(req.body);
     // console.log(req.file)

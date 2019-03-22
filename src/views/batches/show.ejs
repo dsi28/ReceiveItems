@@ -10,7 +10,7 @@
 <h2>Items</h2>
 <a href='/batches/<%=batch.id%>/items/new'>New Item</a>
 <%batch.items.forEach((item)=>{%>
-    <img src='<%=item.image%>' >
+    <img src='<%=item.imageDisplay%>' >
     <h4><%=item.erpId%></h4>
     <p><%=item.addQuantity%></p>
     <a href='/batches/<%=batch.id%>/items/<%=item.id%>/edit'>Edit</a>

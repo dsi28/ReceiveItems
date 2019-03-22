@@ -3,7 +3,8 @@ router = express.Router({mergeParams: true}),
 Batch = require('../models/batch'),
 Item = require('../models/item'),
 multer = require('multer'),
-middleware = require('../middleware');
+middleware = require('../middleware'),
+fs = require('fs');
 
 //multer config
 const multerStorageConfig = multer.diskStorage({
@@ -46,16 +47,27 @@ router.get('/:itemId/edit', middleware.VerifyLoggedUser, (req,res)=>{
     })
 });
 
-router.put('/:itemId', middleware.VerifyLoggedUser, (req,res)=>{
+router.put('/:itemId', middleware.VerifyLoggedUser, upload.single('image'), (req,res,next)=>{
     Item.findByIdAndUpdate(req.params.itemId, req.body.item, (err,updatedItem)=>{
-        res.redirect('/batches/'+req.params.id);
+        if(req.file){
+            middleware.DeleteImage(req,res,next);
+            updatedItem.imageLocation = '\\'+ req.file.path;
+            updatedItem.imageDisplay = req.file.path.replace('public', '');
+            updatedItem.save();
+        }
+        if(err){
+            console.log(err);
+            res.redirect('back');
+        }else{
+            res.redirect('/batches/'+req.params.id);
+        }
     })
 });
 
-router.delete('/:itemId', middleware.VerifyLoggedUser, (req,res)=>{
+router.delete('/:itemId', middleware.VerifyLoggedUser, middleware.DeleteImage, (req,res)=>{
     Item.findByIdAndDelete(req.params.itemId, (err,deletedItem)=>{
         res.redirect('/batches/'+req.params.id);
     })
-})
+});
 
 module.exports = router;

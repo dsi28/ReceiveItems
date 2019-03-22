@@ -27,12 +27,7 @@ router.post('/', upload.single('image'), (req,res)=>{
     if(req.file){
         req.body.item.imageLocation = '\\'+ req.file.path;
         req.body.item.imageDisplay = req.file.path.replace('public', '');
-        console.log('loc: '+ req.body.item.imageLocation + 'dis: '+ req.body.item.imageDisplay);
     }
-    //console.log(req.body);
-    // console.log(req.file)
-    // console.log(req.file.filename);
-    // console.log(req.file.path);
     Item.create(req.body.item, (err, createdItem)=>{
         Batch.findById(req.params.id, (err,foundBatch)=>{
             foundBatch.items.push(createdItem);
@@ -40,7 +35,6 @@ router.post('/', upload.single('image'), (req,res)=>{
             res.redirect('/batches/'+foundBatch.id)
         })
     })
-
 });
 
 router.get('/:itemId/edit', (req,res)=>{
@@ -53,6 +47,12 @@ router.get('/:itemId/edit', (req,res)=>{
 
 router.put('/:itemId', (req,res)=>{
     Item.findByIdAndUpdate(req.params.itemId, req.body.item, (err,updatedItem)=>{
+        res.redirect('/batches/'+req.params.id);
+    })
+});
+
+router.delete('/:itemId', (req,res)=>{
+    Item.findByIdAndDelete(req.params.itemId, (err,deletedItem)=>{
         res.redirect('/batches/'+req.params.id);
     })
 })

@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'),
+passportLocalMongoose = require('passport-local-mongoose');
 
 const userSchema = new mongoose.Schema({
     username: String,
@@ -10,4 +11,7 @@ const userSchema = new mongoose.Schema({
     // admin: create batches, create items, delete batches, delete items, responde to requests, approve batches, power over users
     // strongUser: create batches, create items, delete items, responde to requests, send requests
     // user: create items, delete items, send requests
+
+userSchema.plugin(passportLocalMongoose);
+
 module.exports = mongoose.model('User', userSchema);

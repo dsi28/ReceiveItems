@@ -1,7 +1,8 @@
 const express = require('express'),
 router = express.Router({mergeParams: true}),
 Batch = require('../models/batch'),
-Item = require('../models/item');
+Item = require('../models/item'),
+middleware = require('../middleware');
 
 
     // routes for :   batches/
@@ -19,11 +20,11 @@ router.get('/', (req, res)=>{
 });
 
 // new
-router.get('/new', (req, res)=>{
+router.get('/new', middleware.VerifyLoggedUser, (req, res)=>{
     res.render('batches/new');
 });
 
-router.post('/', (req,res)=>{
+router.post('/', middleware.VerifyLoggedUser, (req,res)=>{
     Batch.create({name: req.body.name}, (err,createdBatch)=>{
         if(err){
             console.log(err);
@@ -34,7 +35,7 @@ router.post('/', (req,res)=>{
     });
 })
 
-router.get('/:id/edit', (req,res)=>{
+router.get('/:id/edit', middleware.VerifyLoggedUser, (req,res)=>{
     Batch.findById(req.params.id, (err,foundBatch)=>{
         if(err){
             console.log(err);
@@ -45,7 +46,7 @@ router.get('/:id/edit', (req,res)=>{
     })
 });
 
-router.put('/:id', (req,res)=>{
+router.put('/:id', middleware.VerifyLoggedUser,(req,res)=>{
     Batch.findByIdAndUpdate(req.params.id, req.body.batch, (err,updatedBatch)=>{
         if(err){
             console.log(err);
@@ -67,7 +68,7 @@ router.get('/:id', (req,res)=>{
     })
 });
 
-router.delete('/:id', (req,res)=>{
+router.delete('/:id', middleware.VerifyLoggedUser, (req,res)=>{
     Batch.findByIdAndDelete(req.params.id, (err, deleteBatch)=>{
         if(err){
             console.log(err);

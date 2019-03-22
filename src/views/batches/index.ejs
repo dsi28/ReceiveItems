@@ -1,7 +1,14 @@
 <h1>Batches Index</h1>
 
-<h3><a href='/batches/new'>Create new batch</a><h3>
+<%if(currentUser){%>
+<h2>Logged in as: <%=currentUser.username%>
+<h4><a href='/auth/logout'>Logout</a><h3>
+<%}else{%>
+<h4><a href='/auth/register'>Register</a><h3>
+<h4><a href='/auth/login'>Login</a><h3>
+<%}%>
 
+<h3><a href='/batches/new'>Create new batch</a><h3>
 
 <%batches.forEach((batch)=>{%>
 

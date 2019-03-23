@@ -1,7 +1,7 @@
 <h1>Batches Index</h1>
 
 <%if(currentUser){%>
-<h2>Logged in as: <%=currentUser.username%>
+<h2>Logged in as: <a href='/users/<%=currentUser._id%>'><%=currentUser.username%></a></h2>
 <h4><a href='/auth/logout'>Logout</a><h3>
 <%}else{%>
 <h4><a href='/auth/register'>Register</a><h3>

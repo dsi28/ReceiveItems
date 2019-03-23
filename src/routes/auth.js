@@ -14,7 +14,8 @@ router.get('/register', (req,res)=>{
 router.post('/register', (req,res)=>{
     let user ={
         username: req.body.username,
-        email: req.body.email
+        email: req.body.email,
+        role: req.body.role
     }
     User.register(new User(user ), 
         req.body.password, 

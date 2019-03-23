@@ -11,7 +11,6 @@ middleware.VerifyLoggedUser = (req,res,next)=>{
 };
 
 middleware.DeleteImage = (req,res,next)=>{
-    console.log('immage del mid')
     Item.findById(req.params.itemId, (err,foundItem)=>{
         if(err){
             console.log(err);

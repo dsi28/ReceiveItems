@@ -1,4 +1,4 @@
-
+require('dotenv').config();
 //require packages/setup
 const express = require('express'),
 app = express(),
@@ -15,7 +15,7 @@ User = require('./models/user');
 //auth config
     //express-session config
 app.use(require('express-session')({
-    secret: 'secret code 123#@!',
+    secret: process.env.PASSPORT_SECRET,
     resave: false,
     saveUninitialized: false
 }));
@@ -27,8 +27,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //route files
-const batchRouter = require('./routes/batch'),
-itemRouter = require('./routes/item'),
+const batchRouter = require('./routes/batches'),
+itemRouter = require('./routes/items'),
 authRouter = require('./routes/auth');
 
 //app config

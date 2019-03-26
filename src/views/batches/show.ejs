@@ -3,10 +3,12 @@
 
 <h3><%=batch.name%></h3>
 <h3><%=batch.createdDate%></h3>
-<a href='/batches/<%=batch.id%>/edit'>Edit</a>
-<form method='POST' action='/batches/<%=batch.id%>?_method=DELETE'>
-    <input type='submit' value='Delete'>
-</form>
+<%if(currentUser && currentUser.role == 'admin'){%>
+    <a href='/batches/<%=batch.id%>/edit'>Edit</a>
+    <form method='POST' action='/batches/<%=batch.id%>?_method=DELETE'>
+        <input type='submit' value='Delete'>
+    </form>
+<%}%>
 <h2>Items</h2>
 <a href='/batches/<%=batch.id%>/items/new'>New Item</a>
 <hr>

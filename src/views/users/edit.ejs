@@ -7,9 +7,13 @@
 <%if(currentUser && currentUser.role == 'admin' ){%>
     <label for='role'>Role</label>
     <select type='select' name='role'>
-        <option value='standard'>User</option>
-        <option value='strong'>Strong User</option>
-        <option value='admin'>Admin</option>
+    <%if(user.role=='admin'){%>
+        <option value='admin' selected>Admin</option>
+        <option value='standard'>Standard User</option>
+    <%}else{%>
+    <option value='standard' select>Standard User</option>
+    <option value='admin' >Admin</option>
+    <%}%>    
     </select> 
 <%}else{%>
     <label for='roleDisplay'>Role</label>

@@ -1,7 +1,8 @@
 const express = require('express'),
 router = express.Router({mergeParams: true}),
 User = require('../models/user'),
-passport = require('passport');
+passport = require('passport'),
+Group = require('../models/group');
 
 
     //auth routes: '/auth'
@@ -12,21 +13,25 @@ router.get('/register', (req,res)=>{
     res.render('auth/register');
 });
 router.post('/register', (req,res)=>{
-    let user ={
+    let user = {
         username: req.body.username,
         email: req.body.email,
         role: req.body.role
     }
-    User.register(new User(user ), 
+    User.register(new User(user), 
         req.body.password, 
         (err,newUser)=>{
             if(err){
                 console.log(err);
                 res.redirect('back');
             }else{
+                Group.findOne({name: newUser.role}, (err,roleGroup)=>{
+                    roleGroup.members.push(newUser);
+                    roleGroup.save();
+                });
                 passport.authenticate('local')(req,res,()=>{
                     res.redirect('/');
-                })
+                });
             }
         })
 });

@@ -12,6 +12,12 @@ const passport = require('passport'),
 LocalStrategy = require('passport-local'),
 User = require('./models/user');
 
+//
+// const Group = require('./models/group');
+// Group.create({name: 'admin'});
+// Group.create({name: 'standard'});
+
+
 //auth config
     //express-session config
 app.use(require('express-session')({

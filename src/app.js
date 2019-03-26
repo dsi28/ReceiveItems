@@ -36,7 +36,8 @@ passport.deserializeUser(User.deserializeUser());
 const batchRouter = require('./routes/batches'),
 itemRouter = require('./routes/items'),
 authRouter = require('./routes/auth'),
-userRouter = require('./routes/users');
+userRouter = require('./routes/users'),
+adminRouter = require('./routes/admin');
 
 //app config
 mongoose.connect('mongodb://localhost:27017/receive_app', { useNewUrlParser: true });
@@ -60,7 +61,8 @@ app.get('/', (req, res)=>{
 
 app.use('/auth', authRouter);
 app.use('/batches', batchRouter);
-app.use('/batches/:id/items', itemRouter),
+app.use('/batches/:id/items', itemRouter);
 app.use('/users', userRouter);
+app.use('/admin', adminRouter);
 
 app.listen(3000,()=>{console.log('App is alive...')})

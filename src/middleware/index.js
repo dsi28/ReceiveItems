@@ -39,4 +39,20 @@ middleware.DeleteImage = (req,res,next)=>{
     })
 };
 
+middleware.ValidateUserRole = (req,res,next)=>{
+    User.findById(req.user._id, (err,foundUser)=>{
+        if(err ){
+            console.log(err);
+            res.redirect('back');
+        }else{
+            if(foundUser.role == 'admin'){
+                next();
+            }else{
+                console.log('This user does not have permission')
+                res.redirect('back');
+            }
+        }
+    })
+}
+
 module.exports = middleware;

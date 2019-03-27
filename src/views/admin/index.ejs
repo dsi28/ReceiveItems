@@ -14,3 +14,14 @@
 <hr>
 <hr>
 <h2>Admins</h2>
+<%admins.forEach((a)=>{%>
+
+    <p><a href='/users/<%=a._id%>'><%=a.username%></a></p> 
+    <a href='/users/<%=a._id%>/edit'>Edit</a>
+    <%if(a.id != currentUser.id){%>
+    <form method='POST' action='/users/<%=a.id%>?_method=DELETE'>
+        <input type='submit' value='Delete'>
+    </form>
+    <%}%>
+    <hr>
+<%})%>

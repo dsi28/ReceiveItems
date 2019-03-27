@@ -15,8 +15,17 @@ router.get('/', (req,res)=>{
             console.log(err);
             res.redirect('back');
         }else{
-            console.log(foundUserList.members);
-            res.render('admin/index', {users: foundUserList.members})
+            Group.findOne({name: 'admin'})
+            .populate('members')
+            .exec((err,foundAdminList)=>{
+                if(err){
+                    console.log(err);
+                    res.redirect('back');
+                }else{
+                    console.log(foundAdminList);
+                    res.render('admin/index', {users: foundUserList.members, admins: foundAdminList.members})
+                }
+            });
         }
     });
 })

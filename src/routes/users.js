@@ -16,6 +16,7 @@ router.get('/:id', middleware.VerifyLoggedUser, (req,res)=>{
     })
 });
 
+//show edit route
 router.get('/:id/edit', middleware.VerifyLoggedUser, (req,res)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){
@@ -27,6 +28,7 @@ router.get('/:id/edit', middleware.VerifyLoggedUser, (req,res)=>{
     })
 });
 
+//update route
 router.put('/:id', middleware.VerifyLoggedUser, (req,res)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){
@@ -67,5 +69,28 @@ router.put('/:id', middleware.VerifyLoggedUser, (req,res)=>{
         }
     })
 });
+
+
+router.delete('/:id',(req,res)=>{
+    User.findByIdAndDelete(req.params.id, (err,userToDelete)=>{
+        if(err){
+            console.log(err);
+            res.redirect('back');
+        }else{
+            Group.findOne({name: userToDelete.role}, (err,foundGroup)=>{
+                if(err){
+                    console.log(err);
+                    res.redirect('back');
+                }else{
+                    foundGroup.members = foundGroup.members.filter((a)=>{
+                        return a != userToDelete.id
+                    });
+                    foundGroup.save();
+                    res.redirect('/admin');
+                }
+            })
+        }
+    })
+})
 
 module.exports=router;

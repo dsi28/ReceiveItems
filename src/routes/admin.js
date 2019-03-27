@@ -6,27 +6,19 @@ middleware = require('../middleware');
 
 
     //routes for : '/admin' 
-router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
-    Group.find({name: 'standard'}, (err,foundUserList)=>{
+    // middleware.VerifyLoggedUser, middleware.ValidateUserRole,
+router.get('/', (req,res)=>{
+    Group.findOne({name: 'standard'})
+    .populate('members')
+    .exec((err,foundUserList)=>{
         if(err){
             console.log(err);
             res.redirect('back');
         }else{
-            Group.find({name: 'admin'}, (err, foundAdminList)=>{
-                if(err){
-                    console.log(err);
-                    res.redirect('back');
-                }else{
-                    console.log('users: ');
-                    console.log(foundUserList.members);
-                    console.log('admins: ');
-                    console.log(foundAdminList.members);
-                    res.render('admin/index', {users: foundUserList, admins: foundAdminList});
-                }
-            });
+            console.log(foundUserList.members);
+            res.render('admin/index', {users: foundUserList.members})
         }
     });
-
 })
 
 module.exports = router;

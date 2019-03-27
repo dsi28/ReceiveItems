@@ -2,7 +2,7 @@
 <hr>
 <hr>
 <h2>Users</h2>
-<%users.foreach((u)=>{%>
+<%users.forEach((u)=>{%>
 
     <p><a href='/users/<%=u._id%>'><%=u.username%></a></p> 
     <a href='/users/<%=u._id%>/edit'>Edit</a>
@@ -14,10 +14,3 @@
 <hr>
 <hr>
 <h2>Admins</h2>
-<%admins.foreach((a)=>{%>
-    <p><a href='/users/<%=a._id%>'><%=a.username%></a></p> 
-    <a href='/users/<%=a._id%>/edit'>Edit</a>
-    <form method='POST' action='/users/<%=a.id%>?_method=DELETE'>
-        <input type='submit' value='Delete'>
-    </form>
-<%})%>

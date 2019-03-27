@@ -4,11 +4,8 @@ const groupSchema = new mongoose.Schema({
     name: String,
     members: [
         {
-        id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-        username: String
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         }
     ]
 });

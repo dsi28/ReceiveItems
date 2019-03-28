@@ -1,0 +1,19 @@
+<h1>Task</h1>
+<form method='POST' action='/tasks'>
+    <label for='type'>Type</label>
+    <input type='text' name='task[name]'id='type' value='<%=tempTask.type%>'>
+    <%if(tempTask.type=='item'){%>
+        <label for='batch'>Batch Name</label>
+        <input type='text' id='batch' value='<%tempTask.batchName%>' readonly> 
+        <label for='erpId'>Item ID</label>
+        <input type='text' name='task[name]' id='erpId' value='<%tempTask.name%>' readonly> 
+    <%}%>
+    <label for='name'><%if(tempTask.role=='user'){%>User <%}%> Name</label>
+    <input type='text' name='task[name]' id='name' value='tempTask.name' readonly>
+    <label for='by'>Created By</label>
+    <input type='text' name='task[by]' id='by' value='<%=currentUser.username%>' readonly>
+    <label for='title'>Title</label>
+    <input type='text' name='task[title]' id='title' placeholer='Task Title'> 
+    <label for='desc'>Description</label>
+    <input type='text' name='task[desc]' id='desc' placeholer='Description'>
+</form>

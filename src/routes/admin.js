@@ -6,8 +6,8 @@ middleware = require('../middleware');
 
 
     //routes for : '/admin' 
-    // middleware.VerifyLoggedUser, middleware.ValidateUserRole,
-router.get('/', (req,res)=>{
+
+router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Group.findOne({name: 'standard'})
     .populate('members')
     .exec((err,foundUserList)=>{

@@ -3,7 +3,8 @@ router = express.Router({mergeParams: true}),
 Task = require('../models/task'),
 User = require('../models/user'),
 Batch = require('../models/batch'),
-Item = require('../models/item');
+Item = require('../models/item'),
+Group = require('../models/group');
 
     //routes for :  '/tasks'
 
@@ -21,7 +22,6 @@ router.get('/:type/:primaryId/:secondaryId?/new', (req,res)=>{
             console.log('UUUUUUUUUUSER')
             tempTask.primaryId = foundUser.id;
             tempTask.name = foundUser.username;
-            console.log(tempTask)
             return res.render('task/new', {tempTask:tempTask});
         });
     }else{     
@@ -30,7 +30,6 @@ router.get('/:type/:primaryId/:secondaryId?/new', (req,res)=>{
                 console.log('BAAAAAAAAAAAAAAAAAAAAAAATCH');
                 tempTask.primaryId = foundBatch.id;
                 tempTask.name = foundBatch.name;
-                console.log(tempTask);
                 return res.render('task/new', {tempTask:tempTask});
             }else{
                 console.log('ITEMMMMMMMMMMMMMMMMMMMMMMMMMMMM');
@@ -39,7 +38,6 @@ router.get('/:type/:primaryId/:secondaryId?/new', (req,res)=>{
                     tempTask.secondaryId = foundItem.id;
                     tempTask.name = foundItem.erpId;
                     tempTask.batchName = foundBatch.name;
-                    console.log(tempTask);
                     return res.render('task/new', {tempTask:tempTask});
                 })
             }
@@ -47,17 +45,30 @@ router.get('/:type/:primaryId/:secondaryId?/new', (req,res)=>{
     }
 });
 
-// // route for task with one id: As of now Batch and user tasks
-// router.get('/:type/:primaryId/new', (req,res)=>{
-//     let tempTask = {
-//         type: req.params.type,
-//         primaryId: req.params.primaryId,
-//         secondaryId: req.params.secondaryId
-//     }
-//     res.render('task/new', {task: tempTask} );
-// });
-
-//router.post()
-
+//create route 
+router.post('/:type/:primaryId/:secondaryId?', async (req,res)=>{
+    try{
+        await Group.findOne({name: 'admin'}, (err,foundGroup)=>{
+            req.body.task.for = foundGroup;
+        });
+        req.body.task.status = 'open';
+        req.body.task.primaryId = req.params.primaryId;
+        req.body.task.type = req.params.type;
+        if(req.params.type == 'item'){
+            req.body.task.secondaryId = req.params.secondaryId;
+        }
+        await User.findById(req.user._id, (err, foundUser)=>{
+            req.body.task.createdBy = foundUser;
+        })
+        await Task.create(req.body.task, (err,createdTask)=>{
+            console.log('///////');
+            console.log(createdTask);
+            res.redirect('/batches');
+        })
+    }catch(err){
+        console.log(err);
+        res.redirect('back');
+    }
+});
 
 module.exports = router;

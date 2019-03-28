@@ -5,7 +5,6 @@
 <%}else{%>
 <form method='POST' action='/tasks/<%=tempTask.type%>/<%=tempTask.primaryId%>'>
 <%}%>
-
     <label for='type'>Type</label>
     <input type='text' name='task[name]'id='type' value='<%=tempTask.type%>' readonly>
     <%if(tempTask.type=='item'){%>
@@ -18,10 +17,10 @@
     <input type='text' name='task[name]' id='name' value='<%=tempTask.name%>' readonly>
     <%}%>
     <label for='by'>Created By</label>
-    <input type='text' name='task[by]' id='by' value='currentUser.username%>' readonly>
+    <input type='text' name='task[username]' id='by' value='<%=currentUser.username%>' readonly>
     <label for='title'>Title</label>
     <input type='text' name='task[title]' id='title' placeholer='Task Title'> 
     <label for='desc'>Description</label>
     <input type='text' name='task[desc]' id='desc' placeholer='Description'>
-    <input type='submit' value='Update'>
+    <input type='submit' value='Create'>
 </form>

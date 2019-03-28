@@ -8,11 +8,11 @@ const taskSchema = new mongoose.Schema({
         type:Date
     },
     createdBy: {
-        id: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     for: {
-        id: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Group'
     },
     title: String,

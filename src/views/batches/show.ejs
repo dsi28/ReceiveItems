@@ -8,7 +8,10 @@
     <form method='POST' action='/batches/<%=batch.id%>?_method=DELETE'>
         <input type='submit' value='Delete'>
     </form>
+    <a href='/tasks/batch/<%=batch.id%>/new%>'>Task</a>
 <%}%>
+
+<hr>
 <h2>Items</h2>
 <a href='/batches/<%=batch.id%>/items/new'>New Item</a>
 <hr>
@@ -20,5 +23,6 @@
     <form method='POST' action='/batches/<%=batch.id%>/items/<%=item.id%>?_method=DELETE'>
         <input type='submit' value='Delete'>
     </form>
+    <a href='/tasks/item/<%=batch._id%>/<%=item._id%>/new'>Task</a>
     <hr>
 <%})%>

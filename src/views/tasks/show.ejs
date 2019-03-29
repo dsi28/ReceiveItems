@@ -1,0 +1,23 @@
+<h1><%=task.title%></h1>
+
+<h2><%=task.desc%></h2>
+<h2><%=task.status%></h2>
+<%if(currentUser && currentUser.role == 'admin'){%>
+    <form method='POST' action='/tasks/<%=task.id%>?_method=PUT'>
+    <%if(task.status == 'open'){%>
+        <input type='hidden' name='task[status]' value='closed'>
+        <input type='submit' value='close'>
+    <%}else{%>
+        <input type='hidden' name='task[status]' value='open'>
+        <input type='submit' value='open'>
+    <%}%>
+    </form>
+<%}%>
+
+<p>Created by: <%=task.createdBy.username%> on <%=task.date%></p>
+
+<%if(task.type == 'item' || task.type == 'batch'){%>
+    <a href='/batches/<%=task.primaryId%>'>View Item</a>
+<%}else if(task.type == 'user'){%>
+    <a href='/users/<%=task.primaryId%>'>View User</a>
+<%}%>

@@ -25,3 +25,15 @@
     <%}%>
     <hr>
 <%})%>
+<hr>
+<hr>
+<h2>Tasks</h2>
+<%tasks.forEach((t)=>{%>
+
+    <p><a href='/tasks/<%=t._id%>'><%=t.title%></a></p> 
+    <a href='/tasks/<%=t._id%>/edit'>Edit</a>
+    <form method='POST' action='/tasks/<%=t.id%>?_method=DELETE'>
+        <input type='submit' value='Delete'>
+    </form>
+    <hr>
+<%})%>

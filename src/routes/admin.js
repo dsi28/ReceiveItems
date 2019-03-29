@@ -2,7 +2,8 @@ const express = require('express'),
 router = express.Router({mergeParams: true}),
 User = require('../models/user'),
 Group = require('../models/group'),
-middleware = require('../middleware');
+middleware = require('../middleware'),
+Task = require('../models/task');
 
 
     //routes for : '/admin' 
@@ -22,8 +23,18 @@ router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,r
                     console.log(err);
                     res.redirect('back');
                 }else{
-                    console.log(foundAdminList);
-                    res.render('admin/index', {users: foundUserList.members, admins: foundAdminList.members})
+                    Task.find({}, (err,foundTasks)=>{
+                        if(err){
+                            console.log(err);
+                            res.redirect('back');
+                        }else{
+                            //console.log(foundAdminList);
+                            res.render('admin/index', 
+                            {users: foundUserList.members, 
+                            admins: foundAdminList.members,
+                            tasks: foundTasks});
+                        }
+                    })
                 }
             });
         }

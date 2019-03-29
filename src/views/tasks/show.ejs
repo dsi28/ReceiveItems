@@ -21,3 +21,18 @@
 <%}else if(task.type == 'user'){%>
     <a href='/users/<%=task.primaryId%>'>View User</a>
 <%}%>
+
+
+<a href='/tasks/<%=task.id%>/comments/new'>New Comment</a>
+
+<hr>
+
+<h3>Comments</h3>
+<%task.comments.forEach((comment)=>{%>
+    <p><%=comment.createdBy.username%>:  <%=comment.text%></p>
+    <a href='/tasks/<%=task.id%>/comments/<%=comment.id%>/edit'>Edit</a>
+    <form method='POST' action='/tasks/<%=task.id%>/comments/<%=comment.id%>?_method=DELETE'>
+        <input type='submit' value='Delete'>
+    </form>
+    <hr>
+<%})%>

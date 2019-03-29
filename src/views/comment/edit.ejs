@@ -1,0 +1,9 @@
+<h1>Edit comment for task: <%=task.title%></h1>
+
+<form method='POST' action='/tasks/<%=task.id%>/comments/<%=comment.id%>?_method=PUT'>
+    <label for='username'>User</label>
+    <input type='text' id='username' value='<%=currentUser.username%>' readonly>
+    <label for='text'>Comment:</label>
+    <input type='text' name='comment[text]' id='comment' value='<%=comment.text%>'>
+    <input type='submit' value='Update'>
+</form>

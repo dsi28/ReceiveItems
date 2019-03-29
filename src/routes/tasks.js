@@ -10,7 +10,10 @@ Group = require('../models/group');
 
 // task show route
 router.get('/:id', (req,res)=>{
-    Task.findById(req.params.id).populate('createdBy').exec((err,foundTask)=>{
+    Task.findById(req.params.id)
+    .populate('createdBy')
+    .populate('comments')
+    .exec((err,foundTask)=>{
         if(err){
             console.log(err);
             res.redirect('back');

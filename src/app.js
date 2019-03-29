@@ -38,7 +38,8 @@ itemRouter = require('./routes/items'),
 authRouter = require('./routes/auth'),
 userRouter = require('./routes/users'),
 adminRouter = require('./routes/admin'),
-taskRouter = require('./routes/tasks');
+taskRouter = require('./routes/tasks'),
+commentRouter = require('./routes/comments'); 
 
 //app config
 mongoose.connect('mongodb://localhost:27017/receive_app', { useNewUrlParser: true });
@@ -65,6 +66,8 @@ app.use('/batches', batchRouter);
 app.use('/batches/:id/items', itemRouter);
 app.use('/users', userRouter);
 app.use('/admin', adminRouter);
+app.use('/tasks/:id/comments', commentRouter);
 app.use('/tasks', taskRouter);
+
 
 app.listen(3000,()=>{console.log('App is alive...')})

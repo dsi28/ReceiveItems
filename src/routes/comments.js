@@ -2,11 +2,12 @@ const express = require('express'),
 router = express.Router({mergeParams: true}),
 Task = require('../models/task'),
 Comment = require('../models/comment'),
-User = require('../models/user');
+User = require('../models/user'),
+middleware = require('../middleware');
 
     //routes for : /tasks/:id/comments
 
-router.get('/new', (req,res)=>{
+router.get('/new', middleware.VerifyLoggedUser, (req,res)=>{
     Task.findById(req.params.id, (err,foundTask)=>{
         if(err){
             console.log(err);
@@ -17,7 +18,7 @@ router.get('/new', (req,res)=>{
     })
 });
 
-router.post('/', (req,res)=>{
+router.post('/', middleware.VerifyLoggedUser, (req,res)=>{
     Task.findById(req.params.id, (err,foundTask)=>{
         if(err){
             console.log(err);
@@ -39,7 +40,7 @@ router.post('/', (req,res)=>{
     })
 });
 
-router.get('/:commentId/edit', (req,res)=>{
+router.get('/:commentId/edit', middleware.VerifyLoggedUser, middleware.OwnerOrAdminComment, (req,res)=>{
     Task.findById(req.params.id, (err,foundTask)=>{
         if(err){
             console.log(err);
@@ -57,7 +58,7 @@ router.get('/:commentId/edit', (req,res)=>{
     })
 });
 
-router.put('/:commentId', (req,res)=>{
+router.put('/:commentId', middleware.VerifyLoggedUser, middleware.OwnerOrAdminComment,(req,res)=>{
     Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err,UpdatedComment)=>{
         if(err){
             console.log(err);
@@ -68,7 +69,7 @@ router.put('/:commentId', (req,res)=>{
     })
 });
 
-router.delete('/:commentId', (req,res)=>{
+router.delete('/:commentId', middleware.VerifyLoggedUser, middleware.OwnerOrAdminComment, (req,res)=>{
     Comment.findByIdAndDelete(req.params.commentId, (err)=>{
         if(err){
             console.log(err);

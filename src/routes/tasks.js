@@ -4,7 +4,8 @@ Task = require('../models/task'),
 User = require('../models/user'),
 Batch = require('../models/batch'),
 Item = require('../models/item'),
-Group = require('../models/group');
+Group = require('../models/group'),
+middleware =  require('../middleware');
 
     //routes for :  '/tasks'
 
@@ -22,8 +23,8 @@ router.get('/:id', (req,res)=>{
     })
 });
 
-// route for task: As of now only items tasks will have two ids
-router.get('/:type/:primaryId/:secondaryId?/new', (req,res)=>{
+// new: As of now only items tasks will have two ids
+router.get('/:type/:primaryId/:secondaryId?/new', middleware.VerifyLoggedUser, (req,res)=>{
     let tempTask = {
         type: req.params.type,
     }
@@ -60,7 +61,7 @@ router.get('/:type/:primaryId/:secondaryId?/new', (req,res)=>{
 });
 
 //create route 
-router.post('/:type/:primaryId/:secondaryId?', async (req,res)=>{
+router.post('/:type/:primaryId/:secondaryId?', middleware.VerifyLoggedUser, async (req,res)=>{
     try{
         await Group.findOne({name: 'admin'}, (err,foundGroup)=>{
             req.body.task.for = foundGroup;
@@ -87,7 +88,7 @@ router.post('/:type/:primaryId/:secondaryId?', async (req,res)=>{
 
 
 //task edit route
-router.get('/:id/edit', (req,res)=>{
+router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.OwnerOrAdminTask, (req,res)=>{
     Task.findById(req.params.id)
     .populate('createdBy')
     .exec((err,foundTask)=>{
@@ -100,7 +101,7 @@ router.get('/:id/edit', (req,res)=>{
     })
 });
 
-router.put('/:id', (req,res)=>{
+router.put('/:id', middleware.VerifyLoggedUser, middleware.OwnerOrAdminTask, (req,res)=>{
     Task.findByIdAndUpdate(req.params.id, req.body.task, (err,editTask)=>{
         if(err){
             console.log(err);
@@ -111,7 +112,7 @@ router.put('/:id', (req,res)=>{
     })
 });
 
-router.delete('/:id', (req,res)=>{
+router.delete('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Task.findByIdAndDelete(req.params.id, (err, deletedTask)=>{
         if(err){
             console.log(err);

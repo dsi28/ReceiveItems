@@ -2,7 +2,8 @@ const express = require('express'),
 router = express.Router({mergeParams: true}),
 User = require('../models/user'),
 middleware = require('../middleware'),
-Group = require('../models/group');
+Group = require('../models/group'),
+Task = require('../models/task');
 
     //routes for:  /users
 router.get('/:id', middleware.VerifyLoggedUser, (req,res)=>{
@@ -11,12 +12,19 @@ router.get('/:id', middleware.VerifyLoggedUser, (req,res)=>{
             console.log(err);
             res.redirect('back');
         }else{
-            res.render('users/show', {user: foundUser});
+            Task.find({createdBy: foundUser}, (err,foundTasks)=>{
+                if(err){
+                    console.log(err);
+                    res.redirect('back');
+                }else{
+                    res.render('users/show', {user: foundUser, tasks: foundTasks});
+                }
+            });
         }
     })
 });
 
-//show edit route
+// edit route
 router.get('/:id/edit', middleware.VerifyLoggedUser, (req,res)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){

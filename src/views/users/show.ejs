@@ -4,3 +4,11 @@
 <p><%=user.email%></p>
 
 <a href='/users/<%=user.id%>/edit'>Edit</a>
+
+<hr>
+<h3>Tasks</h3>
+<%tasks.forEach((task)=>{%>
+    <p><a href='/tasks/<%=task._id%>'><%=task.title%></a></p> 
+    <a href='/tasks/<%=task._id%>/edit'>Edit</a>
+    <hr>
+<%})%>

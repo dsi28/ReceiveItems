@@ -19,6 +19,7 @@
     <img src='<%=item.imageDisplay%>' >
     <h4><%=item.erpId%></h4>
     <p><%=item.addQuantity%></p>
+    <a href='/batches/<%=batch.id%>/items/<%=item.id%>'>View</a>
     <a href='/batches/<%=batch.id%>/items/<%=item.id%>/edit'>Edit</a>
     <form method='POST' action='/batches/<%=batch.id%>/items/<%=item.id%>?_method=DELETE'>
         <input type='submit' value='Delete'>

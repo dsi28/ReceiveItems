@@ -19,6 +19,18 @@ const upload = multer({storage: multerStorageConfig});
 
     // routes for :   /batches/:id/items
 
+//show
+router.get('/:itemId', 
+middleware.VerifyLoggedUser,
+middleware.BatchIsReal, 
+middleware.ItemIsReal, 
+(req,res)=>{
+    Item.findById(req.params.itemId, (err,foundItem)=>{
+        res.render('items/show', {item: foundItem, batchId: req.params.id});
+    })
+})
+
+//new
 router.get('/new', middleware.VerifyLoggedUser,(req,res)=>{
     Batch.findById(req.params.id, (err,foundBatch)=>{
         res.render('items/new', {batch : foundBatch});

@@ -1,0 +1,11 @@
+<h1>Item: <%=item.erpId%></h1>
+
+    <img src='<%=item.imageDisplay%>' >
+    <p><%=item.addQuantity%></p>
+    <p><%=item.createdDate%>
+    <a href='/tasks/item/<%=batchId%>/<%=item._id%>/new'>Task</a>
+    <a href='/batches/<%=batchId%>/items/<%=item.id%>/edit'>Edit</a>
+    <form method='POST' action='/batches/<%=batchId%>/items/<%=item.id%>?_method=DELETE'>
+        <input type='submit' value='Delete'>
+    </form>
+    

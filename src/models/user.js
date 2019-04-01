@@ -5,7 +5,9 @@ const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     role: String,
-    email: String
+    email: String,
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 //roles
     // admin: create batches, create items, delete batches, delete items, responde to requests, approve batches, power over users

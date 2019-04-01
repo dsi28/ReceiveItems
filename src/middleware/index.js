@@ -103,4 +103,27 @@ middleware.OwnerOrAdminBatch = (req,res,next)=>{
     })
 };
 
+
+middleware.UserNotNull = (req,res,next)=>{
+    User.findById(req.params.id, (err,foundUser)=>{
+        if(err || !foundUser){
+            console.log(err);
+            console.log('User not found');
+            res.redirect('back');
+        }else{
+            next();
+        }
+    })
+};
+
+middleware.UserEmailNotNull = (req,res,next)=>{
+    User.findById(req.params.id, (err,foundUser)=>{
+        if(!foundUser.email){
+            console.log('add email to user then try again');
+            res.redirect('/users/'+req.params.id+'/edit');
+        }else{
+            next();
+        }
+    })
+};
 module.exports = middleware;

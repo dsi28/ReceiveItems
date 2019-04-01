@@ -162,6 +162,67 @@ middleware.UserIsReal = (req,res,next)=>{
             next();
         }
     })
-}
+};
+
+middleware.TaskIsReal = (req,res,next)=>{
+    Task.findById(req.params.id, (err,foundTask)=>{
+        if(err || !foundTask){
+            console.log(err);
+            console.log('task not found');
+            res.redirect('back');
+        }else{ 
+            next();
+        }
+    })
+};
+
+middleware.VerifyNewAndCreateTask = (req,res,next)=>{
+    switch (req.params.type) {
+        case 'user':
+            User.findById(req.params.primaryId, (err,foundUser)=>{
+                if(err || !foundUser){
+                    console.log(err);
+                    console.log('user not found');
+                    res.redirect('back')
+                }else{
+                    next();
+                }
+            });
+            break;
+        case 'item':
+        Item.findById(req.params.secondaryId, (err,foundItem)=>{
+            if(err || !foundItem){
+                console.log(err);
+                console.log('item not found');
+                res.redirect('back')
+            }else{
+                Batch.findById(req.params.primaryId, (err,foundBatch)=>{
+                    if(err || !foundBatch){
+                        console.log(err);
+                        console.log('batch not found');
+                        res.redirect('back')
+                    }else{
+                        next();
+                    }
+                });
+            }
+        });
+        break;
+        case 'batch':
+        Batch.findById(req.params.primaryId, (err,foundBatch)=>{
+            if(err || !foundBatch){
+                console.log(err);
+                console.log('batch not found');
+                res.redirect('back')
+            }else{
+                next();
+            }
+        });
+            break;
+        default:
+            return res.redirect('back');
+            break;
+    }
+};
 
 module.exports = middleware;

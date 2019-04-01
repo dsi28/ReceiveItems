@@ -35,7 +35,7 @@ router.post('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,
     });
 })
 
-router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
+router.get('/:id/edit', middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, middleware.OwnerOrAdminBatch, (req,res)=>{
     Batch.findById(req.params.id, (err,foundBatch)=>{
         if(err){
             console.log(err);
@@ -46,7 +46,7 @@ router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.ValidateUserRole
     })
 });
 
-router.put('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
+router.put('/:id', middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Batch.findByIdAndUpdate(req.params.id, req.body.batch, (err,updatedBatch)=>{
         if(err){
             console.log(err);
@@ -57,7 +57,7 @@ router.put('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (re
     })
 });
 
-router.get('/:id', (req,res)=>{
+router.get('/:id', middleware.BatchIsReal, (req,res)=>{
     Batch.findById(req.params.id).populate('items').exec((err,foundBatch)=>{
         if(err){
             console.log(err);
@@ -68,7 +68,7 @@ router.get('/:id', (req,res)=>{
     })
 });
 
-router.delete('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
+router.delete('/:id',middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Batch.findByIdAndDelete(req.params.id, (err, deleteBatch)=>{
         if(err){
             console.log(err);

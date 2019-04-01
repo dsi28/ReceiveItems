@@ -83,7 +83,7 @@ middleware.OwnerOrAdminUser = (req,res,next)=>{
 
 middleware.OwnerOrAdminComment = (req,res,next)=>{
     Comment.findById(req.params.commentId, (err,foundComment)=>{
-        if(err || (req.user.role != 'admin' && req.user.username != foundComment.createdBy.username)){
+        if(err || !foundComment|| (req.user.role != 'admin' && req.user.username != foundComment.createdBy.username)){
             console.log(err);
             return res.redirect('back');
         } else{
@@ -126,4 +126,42 @@ middleware.UserEmailNotNull = (req,res,next)=>{
         }
     })
 };
+
+middleware.BatchIsReal = (req,res,next)=>{
+    Batch.findById(req.params.id, (err, foundBatch)=>{
+        if(err || !foundBatch){
+            console.log(err);
+            console.log('batch could not be found');
+            res.redirect('back');
+        }else{
+            next();
+        }
+    })
+};
+
+middleware.ItemIsReal = (req,res,next)=>{
+    Item.findById(req.params.itemId, (err, foundItem)=>{
+        if(err || !foundItem){
+            console.log(err);
+            console.log('item could not be found');
+            res.redirect('back');
+        }else{
+            next();
+        }
+    })
+};
+
+middleware.UserIsReal = (req,res,next)=>{
+    User.findById(req.params.id, (err,foundUser)=>{
+        if(err || !foundUser){
+            console.log(err);
+            console.log('User not found');
+            res.redirect('back');
+        }
+        else{
+            next();
+        }
+    })
+}
+
 module.exports = middleware;

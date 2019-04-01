@@ -39,7 +39,7 @@ router.post('/',middleware.VerifyLoggedUser, upload.single('image'), (req,res)=>
     })
 });
 
-router.get('/:itemId/edit', middleware.VerifyLoggedUser, (req,res)=>{
+router.get('/:itemId/edit', middleware.VerifyLoggedUser, middleware.BatchIsReal, middleware.ItemIsReal, (req,res)=>{
     Item.findById(req.params.itemId, (err, foundItem)=>{
         Batch.findById(req.params.id, (err,foundBatch)=>{
             res.render('items/edit', {item: foundItem, batch: foundBatch});            
@@ -47,7 +47,7 @@ router.get('/:itemId/edit', middleware.VerifyLoggedUser, (req,res)=>{
     })
 });
 
-router.put('/:itemId', middleware.VerifyLoggedUser, upload.single('image'), (req,res,next)=>{
+router.put('/:itemId', middleware.VerifyLoggedUser, middleware.BatchIsReal, middleware.ItemIsReal, upload.single('image'), (req,res,next)=>{
     Item.findByIdAndUpdate(req.params.itemId, req.body.item, (err,updatedItem)=>{
         if(req.file){
             middleware.DeleteImage(req,res,next);
@@ -64,7 +64,7 @@ router.put('/:itemId', middleware.VerifyLoggedUser, upload.single('image'), (req
     })
 });
 
-router.delete('/:itemId', middleware.VerifyLoggedUser, middleware.DeleteImage, (req,res)=>{
+router.delete('/:itemId', middleware.VerifyLoggedUser, middleware.BatchIsReal, middleware.ItemIsReal, middleware.DeleteImage, (req,res)=>{
     Item.findByIdAndDelete(req.params.itemId, (err,deletedItem)=>{
         res.redirect('/batches/'+req.params.id);
     })

@@ -78,6 +78,6 @@ router.delete('/:commentId', middleware.VerifyLoggedUser, middleware.OwnerOrAdmi
             res.redirect('/tasks/'+ req.params.id);
         }
     })
-})
+});
 
 module.exports = router;

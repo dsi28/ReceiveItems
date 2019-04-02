@@ -1,13 +1,25 @@
 <% include ../partials/header.ejs%>
-<h1>New Item For <%=batch.name%></h1>
-<hr>
-<form method='POST' action='/batches/<%=batch.id%>/items' enctype='multipart/form-data'>
-    <label for='erpId'>Item ERP ID</label>
-    <input type='text' name='item[erpId]' id='erpId'>
-    <label for='qty'>Quantity Recieved</label>
-    <input type='text' name='item[addQuantity]' id='qty'>
-    <label for='image'>Image</label>
-    <input type='file' name='image' id='image' accept='images/*'>
-    <input type='submit' value='Create'>
-</form>
+<div class='container default-item-top-margin'>
+    <h1 class='center-text-item'>New Item For <%=batch.name%></h1>
+    <div class='row'>
+        <div class='form-setup'>
+            <form method='POST' action='/batches/<%=batch.id%>/items' enctype='multipart/form-data'>
+                <div class='form-group'>
+                    <label for='erpId'>Item ERP ID</label>
+                    <input class='form-control' type='text' name='item[erpId]' id='erpId' required>
+                </div>
+                <div class='form-group'>
+                    <label for='qty'>Quantity Recieved</label>
+                    <input class='form-control' type='text' name='item[addQuantity]' id='qty'>
+                </div> 
+                <div class='form-group'>
+                    <label for='image'>Image</label>
+                    <input class="form-control-file" type='file' name='image' id='image' accept='images/*'/>
+                </div> 
+                <button class='btn btn-lg btn-primary btn-block' type='submit'>GO!</button>
+            </form>
+        <a href='/batches/<%=batch.id%>'>Back!</a>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer.ejs%>

@@ -1,12 +1,28 @@
 <% include ../partials/header.ejs%>
-<h1>Item: <%=item.erpId%></h1>
+    <div class='container default-page-top-margin'>
+        <div class='row justify-content-md-center'>
+            <div class='col-md-6'>
+                <div class='container'>
+                    <h1 class='center-text-item'><%=item.erpId%></h1>
+                    <img src='<%=item.imageDisplay%>' class='img-fluid rounded mx-auto d-block' alt=''>
+                    <div class='container'>
+                        <label class='default-item-top-margin' for='date'>Created By</label>
+                        <input class='form-control default-item-bottom-margin' value='user' readonly>
+                        <label for='date'>Created Date</label>
+                        <input class='form-control default-item-bottom-margin' value='<%=moment(item.createdDate).format('MMM DD YYYY')%>' readonly>
+                        <label for='qty'>Quantity</label>
+                        <input class='form-control medium-item-bottom-margin' value='<%=item.addQuantity%>' readonly>
+                    </div>
+                    <a class='btn btn-primary btn-block' href='/tasks/item/<%=batchId%>/<%=item._id%>/new'>Task</a>
+                    <a class='button-top-margin btn btn-warning btn-block' href='/batches/<%=batchId%>/items/<%=item.id%>/edit'>Edit</a>
+                    <form method='POST' action='/batches/<%=batchId%>/items/<%=item.id%>?_method=DELETE'>
+                        <input class='button-top-margin default-item-bottom-margin btn btn-danger btn-block' type='submit' value='Delete'>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <img src='<%=item.imageDisplay%>' >
-    <p><%=item.addQuantity%></p>
-    <p><%=item.createdDate%>
-    <a href='/tasks/item/<%=batchId%>/<%=item._id%>/new'>Task</a>
-    <a href='/batches/<%=batchId%>/items/<%=item.id%>/edit'>Edit</a>
-    <form method='POST' action='/batches/<%=batchId%>/items/<%=item.id%>?_method=DELETE'>
-        <input type='submit' value='Delete'>
-    </form>
-    <% include ../partials/footer.ejs%>
+
+
+<% include ../partials/footer.ejs%>

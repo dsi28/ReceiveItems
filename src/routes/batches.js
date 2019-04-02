@@ -30,6 +30,9 @@ router.post('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,
             console.log(err);
             res.redirect('back');
         }else{
+            createdBatch.createdBy.username = req.user.username;
+            createdBatch.createdBy.id = req.user.id;
+        createdBatch.save();
             res.redirect('/batches/'+createdBatch._id);
         }
     });

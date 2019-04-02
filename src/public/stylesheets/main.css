@@ -1,0 +1,18 @@
+.default-page-top-margin{
+    margin-top: 20px;
+}
+.default-item-top-margin{
+    margin-top: 10px;
+}
+.default-item-bottom-margin{
+    margin-bottom: 10px;
+}
+
+.form-setup{
+    width: 30%; 
+    margin:20px auto
+}
+
+.center-text-item{
+    text-align: center;
+}

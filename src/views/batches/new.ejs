@@ -1,9 +1,17 @@
 <% include ../partials/header.ejs%>
-<h1>Batches New </h1>
-<hr>
-<form method='POST' action='/batches'>
-    <label for='name'>Batch Name</label>
-    <input type='text' name='name' id='name'>
-    <input type='submit' value='Create'>
-</form>
+<div class='container default-page-top-margin'>
+    <h2 class='center-text-item'>Create Batch</h1>
+    <div class='row'>
+        <div class='form-setup'>
+            <form method='POST' action='/batches'>
+                <div class='form-group'>
+                    <label for='name'>Batch Name</label>
+                    <input class='form-control' type='text' name='name' id='name' placeholder='batch name'>
+                </div>
+                <input class='btn btn-success btn-block' type='submit' value='Create'>
+            </form>
+            <a href='/batches'>Back!</a>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer.ejs%>

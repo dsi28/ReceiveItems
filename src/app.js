@@ -9,6 +9,8 @@ expressSanitizer = require('express-sanitizer'),
 flash = require('connect-flash');
 
 app.use(flash());
+app.locals.moment = require('moment');
+
 //auth require
 const passport = require('passport'),
 LocalStrategy = require('passport-local'),

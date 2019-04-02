@@ -1,31 +1,54 @@
 <% include ../partials/header.ejs%>
-<h1>Batches Show</h1>
-
-
-<h3><%=batch.name%></h3>
-<h3><%=batch.createdDate%></h3>
-<%if(currentUser && currentUser.role == 'admin'){%>
-    <a href='/batches/<%=batch.id%>/edit'>Edit</a>
-    <form method='POST' action='/batches/<%=batch.id%>?_method=DELETE'>
-        <input type='submit' value='Delete'>
-    </form>
-<%}%>
-<a href='/tasks/batch/<%=batch.id%>/new%>'>Task</a>
-
-<hr>
-<h2>Items</h2>
-<a href='/batches/<%=batch.id%>/items/new'>New Item /batches/<%=batch.id%>/items/new</a>
-<hr>
-<%batch.items.forEach((item)=>{%>
-    <img src='<%=item.imageDisplay%>' >
-    <h4><%=item.erpId%></h4>
-    <p><%=item.addQuantity%></p>
-    <a href='/batches/<%=batch.id%>/items/<%=item.id%>'>View</a>
-    <a href='/batches/<%=batch.id%>/items/<%=item.id%>/edit'>Edit</a>
-    <form method='POST' action='/batches/<%=batch.id%>/items/<%=item.id%>?_method=DELETE'>
-        <input type='submit' value='Delete'>
-    </form>
-    <a href='/tasks/item/<%=batch._id%>/<%=item._id%>/new'>Task</a>
-    <hr>
-<%})%>
+<div class='container default-page-top-margin'>
+    <div class='row'>
+        <div class='col-md-3 text-center'>
+            <h1 ><%=batch.name%></h1>
+            <p>Created by <%=batch.createdBy.username%> (<%=moment(batch.createdDate).format('M/D/YY')%>)</p>
+            <div class='container'>
+                <a class='btn btn-success btn-block' href='/batches/<%=batch.id%>/items/new'>New Item</a>
+                <a class='btn btn-primary btn-block default-item-top-margin' href='/tasks/batch/<%=batch.id%>/new%>'>New Task</a>
+                <%if(currentUser && currentUser.role == 'admin'){%>
+                    <a class='btn btn-warning btn-block default-item-top-margin' href='/batches/<%=batch.id%>/edit'>Edit Batch</a>
+                    <form method='POST' action='/batches/<%=batch.id%>?_method=DELETE'>
+                        <input class='btn btn-danger btn-block default-item-top-margin' type='submit' value='Delete Batch'>
+                    </form>
+                <%}%>
+            </div>
+        </div>
+            <div class='col-md-9'>
+                <div class='container'>
+                <hr>
+                <h2>Items</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Date</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                <%batch.items.forEach((item)=>{%>
+                        <tr>
+                        <td><a href='/batches/<%=batch.id%>/items/<%=item.id%>'><%=item.erpId%></a></td>
+                        <td><%=item.addQuantity%></td>
+                        <td><%=moment(item.createdDate).format('M/D')%></td>
+                        <td><a class='btn btn-primary btn-sm' href='/tasks/item/<%=batch._id%>/<%=item._id%>/new'>Task</a></td>
+                        <td><a class='btn btn-warning btn-sm' href='/batches/<%=batch.id%>/items/<%=item.id%>/edit'>Edit</a></td>
+                        <td>
+                        <form method='POST' action='/batches/<%=batch.id%>/items/<%=item.id%>?_method=DELETE'>
+                            <input class='btn btn-danger btn-sm' type='submit' value='Delete'>
+                        </form>
+                        </td>
+                        </tr>
+                <%})%>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+    </div>
+</div>
 <% include ../partials/footer.ejs%>

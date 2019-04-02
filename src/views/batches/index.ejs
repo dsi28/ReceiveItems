@@ -1,15 +1,30 @@
 <% include ../partials/header.ejs%>
-
-<h1>Batches Index</h1>
-
-<%if(currentUser && currentUser.role == 'admin'){%>
-    <h3><a href='/batches/new'>Create new batch</a><h3>
-<%}%>
-
-
-<%batches.forEach((batch)=>{%>
-
-    <h2><a href='/batches/<%=batch.id%>'><%=batch.name%></a></h2>
-
-<%})%>
+<div class='container default-page-top-margin'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-12 center-text-item'>
+                <h2>Batches</h2>
+                <%if(currentUser && currentUser.role == 'admin'){%>
+                    <a class='btn btn-success default-item-bottom-margin' href='/batches/new'>Create new batch</a>
+                <%}%>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        <%batches.forEach((batch)=>{%>
+            <tr>
+            <td><a href='/batches/<%=batch.id%>'><%=batch.name%></a></td>
+            <td><%=moment(batch.createdDate).format('MMM DD YYYY')%></td>
+            </tr>
+        <%})%>
+        </tbody>
+    </table>
+</div>
 <% include ../partials/footer.ejs%>

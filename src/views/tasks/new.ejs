@@ -1,3 +1,4 @@
+<% include ../partials/header.ejs%>
 <h1>Task</h1>
 
 <%if(tempTask.type=='item'){%>
@@ -24,3 +25,4 @@
     <input type='text' name='task[desc]' id='desc' placeholer='Description'>
     <input type='submit' value='Create'>
 </form>
+<% include ../partials/footer.ejs%>

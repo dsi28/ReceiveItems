@@ -1,6 +1,5 @@
+<% include ../partials/header.ejs%>
 <h1>Edit Task</h1>
-
-
 <form method='POST' action='/tasks/<%=task.id%>?_method=PUT'>
     <label for='type'>Type</label>
     <input type='text' id='type' value='<%=task.type%>' readonly>
@@ -12,3 +11,4 @@
     <input type='text' name='task[desc]' id='desc' value='<%=task.desc%>'>
     <input type='submit' value='Upadte'>
 </form>
+<% include ../partials/footer.ejs%>

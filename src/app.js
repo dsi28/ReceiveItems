@@ -5,8 +5,10 @@ app = express(),
 bodyParser = require('body-parser'),
 mongoose = require('mongoose'),
 methodOverride = require('method-override'),
-expressSanitizer = require('express-sanitizer');
+expressSanitizer = require('express-sanitizer'),
+flash = require('connect-flash');
 
+app.use(flash());
 //auth require
 const passport = require('passport'),
 LocalStrategy = require('passport-local'),
@@ -53,6 +55,8 @@ app.use(expressSanitizer());
 
 app.use((req,res,next)=>{
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 })
 

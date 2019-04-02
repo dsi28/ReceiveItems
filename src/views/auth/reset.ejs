@@ -1,3 +1,4 @@
+<% include ../partials/header.ejs%>
 <h1>Reset</h1>
 
 <form method='POST' action='/auth/reset/<%=token%>'>
@@ -7,3 +8,4 @@
     <input type='password' name='confirm' id='confirm' placeholder='confirm password'>
     <input type='submit' value='Update'>
 </form>
+<% include ../partials/footer.ejs%>

@@ -1,3 +1,4 @@
+<% include ../partials/header.ejs%>
 <h1>User page for <%=user.username%></h1>
 
 <p><%=user.role%></p>
@@ -12,3 +13,4 @@
     <a href='/tasks/<%=task._id%>/edit'>Edit</a>
     <hr>
 <%})%>
+<% include ../partials/footer.ejs%>

@@ -1,16 +1,9 @@
-<h1>Batches Index</h1>
+<% include ../partials/header.ejs%>
 
-<%if(currentUser){%>
-<h2>Logged in as: <a href='/users/<%=currentUser._id%>'><%=currentUser.username%></a></h2>
-<h4><a href='/auth/logout'>Logout</a><h3>
-<%}else{%>
-<h4><a href='/auth/register'>Register</a><h3>
-<h4><a href='/auth/login'>Login</a><h3>
-<%}%>
+<h1>Batches Index</h1>
 
 <%if(currentUser && currentUser.role == 'admin'){%>
     <h3><a href='/batches/new'>Create new batch</a><h3>
-    <h3><a href='/admin'>Admin Dashboard</a><h3>
 <%}%>
 
 
@@ -19,3 +12,4 @@
     <h2><a href='/batches/<%=batch.id%>'><%=batch.name%></a></h2>
 
 <%})%>
+<% include ../partials/footer.ejs%>

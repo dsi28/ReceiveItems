@@ -1,5 +1,5 @@
+<% include ../partials/header.ejs%>
 <h1>Edit Item </h1>
-<a href='/batches'>All Batches</a>
 <hr>
 <form method='POST' action='/batches/<%=batch.id%>/items/<%=item.id%>?_method=PUT' enctype='multipart/form-data'>
     <label for='erpId'>Item ERP ID</label>
@@ -13,3 +13,4 @@
     <input type='file' name='image' id='image' accept='images/*'>
     <input type='submit' value='Create'>
 </form>
+<% include ../partials/footer.ejs%>

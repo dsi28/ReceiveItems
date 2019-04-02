@@ -6,6 +6,7 @@ multer = require('multer'),
 middleware = require('../middleware'),
 fs = require('fs');
 
+
 //multer config
 const multerStorageConfig = multer.diskStorage({
     destination: (req,file,cb)=>{
@@ -19,6 +20,21 @@ const upload = multer({storage: multerStorageConfig});
 
     // routes for :   /batches/:id/items
 
+
+
+//new
+router.get('/new', middleware.VerifyLoggedUser,(req,res)=>{
+    Batch.findById(req.params.id, (err,foundBatch)=>{
+        if(err){
+            console.log(err);
+            console.log('yoooooooo');
+            res.redirect('back');
+        }
+        res.render('items/new', {batch : foundBatch});
+    })
+});
+
+
 //show
 router.get('/:itemId', 
 middleware.VerifyLoggedUser,
@@ -30,12 +46,7 @@ middleware.ItemIsReal,
     })
 })
 
-//new
-router.get('/new', middleware.VerifyLoggedUser,(req,res)=>{
-    Batch.findById(req.params.id, (err,foundBatch)=>{
-        res.render('items/new', {batch : foundBatch});
-    })
-});
+
 
 router.post('/',middleware.VerifyLoggedUser, upload.single('image'), (req,res)=>{
     if(req.file){

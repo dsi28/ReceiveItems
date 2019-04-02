@@ -1,8 +1,9 @@
+<% include ../partials/header.ejs%>
 <h1>Batches Edit</h1>
-<a href='/batches'>All Batches</a>
 <hr>
 <form method='POST' action='/batches/<%=batch.id%>?_method=PUT'>
     <label for='name'>Batch Name</label>
     <input type='text' name='batch[name]' id='name' value='<%=batch.name%>'>
     <input type='submit' value='Update'>
 </form>
+<% include ../partials/footer.ejs%>

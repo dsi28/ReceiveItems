@@ -1,5 +1,6 @@
+<% include ../partials/header.ejs%>
 <h1>Batches Show</h1>
-<a href='/batches'>All Batches</a>
+
 
 <h3><%=batch.name%></h3>
 <h3><%=batch.createdDate%></h3>
@@ -13,7 +14,7 @@
 
 <hr>
 <h2>Items</h2>
-<a href='/batches/<%=batch.id%>/items/new'>New Item</a>
+<a href='/batches/<%=batch.id%>/items/new'>New Item /batches/<%=batch.id%>/items/new</a>
 <hr>
 <%batch.items.forEach((item)=>{%>
     <img src='<%=item.imageDisplay%>' >
@@ -27,3 +28,4 @@
     <a href='/tasks/item/<%=batch._id%>/<%=item._id%>/new'>Task</a>
     <hr>
 <%})%>
+<% include ../partials/footer.ejs%>

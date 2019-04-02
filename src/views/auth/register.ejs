@@ -1,16 +1,32 @@
 <% include ../partials/header.ejs%>
-<form method='POST' action='/auth/register'>
-<label for='username'>Username</label>
-<input type='text' name='username' id='username' placeholder='username' required>
-<label for='password'>Password</label>
-<input type='password' name='password' id='password'placeholder='password' required>
-<label for='email'>Email</label>
-<input type='email' name='email' id='email' placeholder='email'>
-<label for='role'>Role</label>
-<select name='role' id='role'>
-    <option value='standard'>User</option>
-    <option value='admin'>Admin</option>
-</select>
-<button>Register</button>
-</form>
+<div class='container default-page-top-margin'>
+    <h1 class='center-text-item'>Sign Up!</h1>
+    <div class='row'>
+        <div class='form-setup'>
+            <form method='POST' action='/auth/register'>
+                <div class='form-group'>
+                    <label for='username'>Username</label>
+                    <input class='form-control' type='text' name='username' id='username' placeholder='username' required> 
+                </div>
+                <div class='form-group'>
+                    <label for='password'>Password</label>
+                    <input class='form-control' type='password' name='password' id='password'placeholder='password' required>
+                </div> 
+                <div class='form-group'>
+                    <label for='email'>Email</label>
+                    <input class='form-control' type='email' name='email' id='email' placeholder='email'>
+                </div>
+                <div class='form-group'>
+                    <label for='role'>Role</label>
+                    <select class='form-control' name='role' id='role'>
+                        <option value='standard'>User</option>
+                        <option value='admin'>Admin</option>
+                    </select>
+                </div>
+                <button class='btn btn-lg btn-primary btn-block' type='submit'>Login!</button>
+            </form>
+            <a href='/auth/login'>Login Instead!</a>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer.ejs%>

@@ -1,10 +1,21 @@
 <% include ../partials/header.ejs%>
-<h2>Login</h2>
-<form method='POST' action='/auth/login'>
-<label for='username'>Username</label>
-<input type='text' name='username' id='username' placeholder='username' required>
-<label for='password'>Password</label>
-<input type='password' name='password' id='password'placeholder='password' required>
-<button>Login</button>
-</form>
+<div class='container default-page-top-margin'>
+    <h1 class='center-text-item'>LogIn!</h1>
+    <div class='row'>
+        <div class='form-setup'>
+            <form method='POST' action='/auth/login'>
+                <div class='form-group'>
+                    <label for='username'>Username</label>
+                    <input class='form-control' type='text' name='username' id='username' placeholder='username' required> 
+                </div>
+                <div class='form-group'>
+                    <label for='password'>Password</label>
+                    <input class='form-control' type='password' name='password' id='password'placeholder='password' required>
+                </div> 
+                <button class='btn btn-lg btn-primary btn-block' type='submit'>Login!</button>
+            </form>
+            <a href='/auth/register'>Sign up instead!</a>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer.ejs%>

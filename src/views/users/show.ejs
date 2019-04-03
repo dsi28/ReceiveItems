@@ -1,16 +1,48 @@
 <% include ../partials/header.ejs%>
-<h1>User page for <%=user.username%></h1>
-
-<p><%=user.role%></p>
-<p><%=user.email%></p>
-
-<a href='/users/<%=user.id%>/edit'>Edit</a>
-<a href='/auth/<%=user.id%>/reset'>Reset Password</a>
-<hr>
-<h3>Tasks</h3>
-<%tasks.forEach((task)=>{%>
-    <p><a href='/tasks/<%=task._id%>'><%=task.title%></a></p> 
-    <a href='/tasks/<%=task._id%>/edit'>Edit</a>
-    <hr>
-<%})%>
+<div class='container default-page-top-margin'>
+    <div class='row justify-content-md-center default-item-bottom-margin'>
+        <div class='col-md-4'>
+            <div class='container'>
+                <h1 class='center-text-item'><%=user.username%></h1>
+                <div class='container'>
+                    <label class='default-item-top-margin' for='role'>User Role</label>
+                    <input class='form-control default-item-bottom-margin' id='role' value='<%=user.role%>' readonly>
+                    <label for='email'>Email</label>
+                    <input class='form-control default-item-bottom-margin' id='email' value='<%=user.email%>' readonly>        
+                </div>
+                <a class='btn  btn-info btn-block' href='/auth/<%=user.id%>/reset'>Password Reset</a>
+                <a class='btn btn-primary btn-block' >Task</a>
+                <a class='button-top-margin btn btn-warning btn-block' href='/users/<%=user.id%>/edit'>Edit</a>
+                <%if(currentUser && currentUser.role == 'admin'){%>
+                    <form method='POST' action='/users/<%=user.id%>?_method=DELETE'>
+                        <input class='button-top-margin default-item-bottom-margin btn btn-danger btn-block' type='submit' value='Delete'>
+                    </form>
+                <%}%>
+            </div>
+        </div>
+        <div class='col-md-8'>
+            <div class='container'>
+                <hr>
+                <h2>Tasks</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                <%tasks.forEach((task)=>{%>
+                        <tr>
+                        <td><a href='/tasks/<%=task._id%>'><%=task.title%></a></td>
+                        <td><a class='btn btn-warning btn-sm' href='/tasks/<%=task._id%>/edit'>Edit</a></td>
+                        </tr>
+                <%})%>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer.ejs%>

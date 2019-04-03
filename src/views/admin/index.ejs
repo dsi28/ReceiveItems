@@ -56,9 +56,9 @@
                     <td><a class='btn btn-outline-warning btn-sm' href='/users/<%=a._id%>/edit'>Edit</a></td>
                     <td>
                     <%if(a.id != currentUser.id){%>
-                    <form method='POST' action='/users/<%=a.id%>?_method=DELETE'>
-                        <input class='btn btn-outline-warning btn-sm' type='submit' value='Delete'>
-                    </form>
+                        <form method='POST' action='/users/<%=a.id%>?_method=DELETE'>
+                            <input class='btn btn-outline-warning btn-sm' type='submit' value='Delete'>
+                        </form>
                     <%}%>
                     </td>
                     </tr>

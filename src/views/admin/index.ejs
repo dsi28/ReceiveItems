@@ -1,41 +1,106 @@
 <% include ../partials/header.ejs%>
-<h1>Admin Dashboard</h1>
-<hr>
-<hr>
-<h2>Users</h2>
-<%users.forEach((u)=>{%>
-
-    <p><a href='/users/<%=u._id%>'><%=u.username%></a></p> 
-    <a href='/users/<%=u._id%>/edit'>Edit</a>
-    <form method='POST' action='/users/<%=u.id%>?_method=DELETE'>
-        <input type='submit' value='Delete'>
-    </form>
-    <hr>
-<%})%>
-<hr>
-<hr>
-<h2>Admins</h2>
-<%admins.forEach((a)=>{%>
-
-    <p><a href='/users/<%=a._id%>'><%=a.username%></a></p> 
-    <a href='/users/<%=a._id%>/edit'>Edit</a>
-    <%if(a.id != currentUser.id){%>
-    <form method='POST' action='/users/<%=a.id%>?_method=DELETE'>
-        <input type='submit' value='Delete'>
-    </form>
-    <%}%>
-    <hr>
-<%})%>
-<hr>
-<hr>
-<h2>Tasks</h2>
-<%tasks.forEach((t)=>{%>
-
-    <p><a href='/tasks/<%=t._id%>'><%=t.title%></a></p> 
-    <a href='/tasks/<%=t._id%>/edit'>Edit</a>
-    <form method='POST' action='/tasks/<%=t.id%>?_method=DELETE'>
-        <input type='submit' value='Delete'>
-    </form>
-    <hr>
-<%})%>
+<div class='container default-page-top-margin default-item-bottom-margin'>
+    <h1 class='center-text-item'>Admin Dashboard</h1>
+    <div class='container default-page-top-margin default-item-bottom-margin'>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-md-12 center-text-item'>
+                    <h2>Users</h2>
+                </div>
+            </div>
+        </div>
+        <div class='table-responsive'>
+            <table class="table table-hover table-dark">
+                <thead class="thead-light">
+                    <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <%users.forEach((u)=>{%>
+                    <tr>
+                    <td><a href='/users/<%=u._id%>'><%=u.username%></a></td>
+                    <td><a class='btn btn-outline-warning btn-sm' href='/users/<%=u._id%>/edit'>Edit</a></td>
+                    <td><form method='POST' action='/users/<%=u.id%>?_method=DELETE'>
+                        <input class='btn btn-outline-danger btn-sm' type='submit' value='Delete'>
+                    </form></td>
+                    </tr>
+                <%})%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class='container default-page-top-margin default-item-bottom-margin'>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-md-12 center-text-item'>
+                    <h2>Admins</h2>
+                </div>
+            </div>
+        </div>
+        <div class='table-responsive'>
+            <table class="table table-hover table-dark">
+                <thead class="thead-light">
+                    <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <%admins.forEach((a)=>{%>
+                    <tr>
+                    <td><a href='/users/<%=a._id%>'><%=a.username%></a></td>
+                    <td><a class='btn btn-outline-warning btn-sm' href='/users/<%=a._id%>/edit'>Edit</a></td>
+                    <td>
+                    <%if(a.id != currentUser.id){%>
+                    <form method='POST' action='/users/<%=a.id%>?_method=DELETE'>
+                        <input class='btn btn-outline-warning btn-sm' type='submit' value='Delete'>
+                    </form>
+                    <%}%>
+                    </td>
+                    </tr>
+                <%})%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+    <div class='container default-page-top-margin default-item-bottom-margin'>
+        <div class='container'>
+            <div class='row'>
+                    <div class='col-md-12 center-text-item'>
+                        <h2>Tasks</h2>
+                    </div>
+                </div>
+            </div>
+            <div class='table-responsive'>
+                <table class="table table-hover table-dark">
+                    <thead class="thead-light">
+                        <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <%tasks.forEach((t)=>{%>
+                        <tr>
+                        <td><a href='/tasks/<%=t._id%>'><%=t.title%></a></td>
+                        <td><a class='btn btn-outline-warning btn-sm' href='/tasks/<%=t._id%>/edit'>Edit</a></td>
+                        <td>
+                        <form method='POST' action='/tasks/<%=t.id%>?_method=DELETE'>
+                            <input class='btn btn-outline-danger btn-sm' type='submit' value='Delete'>
+                        </form>
+                        </td>
+                        </tr>
+                    <%})%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer.ejs%>

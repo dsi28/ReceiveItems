@@ -10,9 +10,8 @@ crypto = require('crypto');
 
 
     //auth routes: '/auth'
+
 //
-
-
 router.get('/register', (req,res)=>{
     res.render('auth/register');
 });
@@ -27,6 +26,7 @@ router.post('/register', (req,res)=>{
         (err,newUser)=>{
             if(err){
                 console.log(err);
+                req.flash('error', err);
                 res.redirect('back');
             }else{
                 Group.findOne({name: newUser.role}, (err,roleGroup)=>{
@@ -34,10 +34,11 @@ router.post('/register', (req,res)=>{
                     roleGroup.save();
                 });
                 passport.authenticate('local')(req,res,()=>{
+                    req.flash('success', 'Welcome to the Receiving App '+ newUser.username);
                     res.redirect('/');
                 });
             }
-        })
+    })
 });
 
 router.get('/login', (req,res)=>{
@@ -45,14 +46,17 @@ router.get('/login', (req,res)=>{
 });
 
 router.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/auth/login'
+    successRedirect: '/batches',
+    failureRedirect: '/auth/login',
+    successFlash: 'Welcome Back!',
+    failureFlash: true
 }), (req,res)=>{
 });
 
 router.get('/logout', (req,res)=>{
     req.logOut();
-    res.redirect('/');
+    req.flash('success', 'You have been successfully logged out!');
+    res.redirect('/batches');
 });
 
 
@@ -64,9 +68,8 @@ router.get('/logout', (req,res)=>{
 //// pasword reset 
 
 router.get('/:id/passwordReset', middleware.VerifyLoggedUser, middleware.OwnerOrAdminUser, middleware.UserEmailNotNull, (req,res)=>{
-    User.findById(req.params.id, (err,foundUser)=>{
-        res.redirect(`/auth/${req.params.id}/reset`)
-    });
+    console.log('outdated route...');
+    req.flash('error', 'Remove route');
 });
 
 //get password reset
@@ -113,15 +116,15 @@ router.get('/:id/reset',
                     };
                     smtpTransport.sendMail(mailOptions, function(err) {
                         console.log('mail sent');
-                        //req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
                         done(err, 'done');
                     });
                 }
                 ], function(err) {
                     console.log(err);
+                    req.flash('error', 'Could not reset password: ');
                     res.redirect('/users/'+req.params.id);
             });
-            //req.flash('success', 'An email has been sent to your account\'s email address');
+            req.flash('success', 'Password Reset email has been sent...');
             res.redirect('back');
         })
 });
@@ -133,7 +136,7 @@ router.get('/reset/:token', (req, res)=>{
         resetPasswordExpires: { $gt: Date.now() } 
 	}, (err, user)=> {
         if(err || !user){
-            //req.flash('error', 'Password reset or token is invalid or expired');
+            req.flash('error', 'Password reset or token is invalid or expired');
             return res.redirect('back');
         }else{
             res.render('auth/reset', {token: req.params.token});
@@ -150,7 +153,7 @@ router.post('/reset/:token', (req,res)=>{
             resetPasswordExpires: { $gt: Date.now() } }, 
             (err, user)=> {
                 if (err||!user) {
-                    //req.flash('error', 'Password reset token is invalid or has expired.');
+                    req.flash('error', 'Password reset token is invalid');
                     return res.redirect('/batches');
                 }
                 if(req.body.password === req.body.confirm) {
@@ -164,7 +167,7 @@ router.post('/reset/:token', (req,res)=>{
                     });
                     })
                 } else {
-                    //req.flash("error", "Passwords do not match.");
+                    req.flash("error", "Passwords do not match");
                     return res.redirect('back');
                 }
             });
@@ -184,17 +187,15 @@ router.post('/reset/:token', (req,res)=>{
                 text: `This is a confirmation email that the password for your account ${user.email} has just been changed.`
                 };
             smtpTransport.sendMail(mailOptions, function(err) {
-                //req.flash('success', 'Success! Your password has been changed.');
+                req.flash('success', 'Your password has been updated!');
                 done(err);
             });
         }
         ], function(err) {
+            req.flash('error', 'Could not update password: '+ error.message);
             res.redirect('/batches');
 	    });
 });
-
-
 //end auth routes
-
 
 module.exports= router;

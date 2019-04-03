@@ -20,20 +20,17 @@ const upload = multer({storage: multerStorageConfig});
 
     // routes for :   /batches/:id/items
 
-
-
 //new
 router.get('/new', middleware.VerifyLoggedUser,(req,res)=>{
     Batch.findById(req.params.id, (err,foundBatch)=>{
         if(err){
             console.log(err);
-            console.log('yoooooooo');
+            req.flash('error', err);
             res.redirect('back');
         }
         res.render('items/new', {batch : foundBatch});
     })
 });
-
 
 //show
 router.get('/:itemId', 
@@ -44,9 +41,7 @@ middleware.ItemIsReal,
     Item.findById(req.params.itemId, (err,foundItem)=>{
         res.render('items/show', {item: foundItem, batchId: req.params.id});
     })
-})
-
-
+});
 
 router.post('/',middleware.VerifyLoggedUser, upload.single('image'), (req,res)=>{
     if(req.file){
@@ -57,6 +52,7 @@ router.post('/',middleware.VerifyLoggedUser, upload.single('image'), (req,res)=>
         Batch.findById(req.params.id, (err,foundBatch)=>{
             foundBatch.items.push(createdItem);
             foundBatch.save();
+            req.flash('success', 'Item created!');
             res.redirect('/batches/'+foundBatch.id)
         })
     })
@@ -80,8 +76,10 @@ router.put('/:itemId', middleware.VerifyLoggedUser, middleware.BatchIsReal, midd
         }
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }else{
+            req.flash('success', 'Item has been updated!');
             res.redirect('/batches/'+req.params.id);
         }
     })
@@ -89,6 +87,7 @@ router.put('/:itemId', middleware.VerifyLoggedUser, middleware.BatchIsReal, midd
 
 router.delete('/:itemId', middleware.VerifyLoggedUser, middleware.BatchIsReal, middleware.ItemIsReal, middleware.DeleteImage, (req,res)=>{
     Item.findByIdAndDelete(req.params.itemId, (err,deletedItem)=>{
+        req.flash('success', 'Item Deleted!');
         res.redirect('/batches/'+req.params.id);
     })
 });

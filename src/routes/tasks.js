@@ -18,6 +18,7 @@ router.get('/:id', middleware.TaskIsReal, (req,res)=>{
     .exec((err,foundTask)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }
         res.render('tasks/show', {task: foundTask});
@@ -33,6 +34,7 @@ router.get('/:type/:primaryId/:secondaryId?/new', middleware.VerifyLoggedUser, m
         User.findById(req.params.primaryId, (err, foundUser)=>{
             if(err){
                 console.log(err);
+                req.flash('error', err);
                 return res.redirect('back');
             }
             console.log('UUUUUUUUUUSER')
@@ -83,6 +85,7 @@ router.post('/:type/:primaryId/:secondaryId?', middleware.VerifyLoggedUser, midd
         })
     }catch(err){
         console.log(err);
+        req.flash('error', err);
         res.redirect('back');
     }
 });
@@ -95,6 +98,7 @@ router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.TaskIsReal, midd
     .exec((err,foundTask)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }else{
             res.render('tasks/edit', {task:foundTask});
@@ -106,8 +110,10 @@ router.put('/:id', middleware.VerifyLoggedUser, middleware.TaskIsReal, middlewar
     Task.findByIdAndUpdate(req.params.id, req.body.task, (err,editTask)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back'); 
         }else{
+            req.flash('success', 'Task has been updated!');
             res.redirect('/tasks/'+editTask._id);
         }
     })
@@ -117,13 +123,16 @@ router.delete('/:id', middleware.VerifyLoggedUser, middleware.TaskIsReal, middle
     Task.findByIdAndDelete(req.params.id, (err, deletedTask)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }else{
             Comment.deleteMany({_id: {$in: deletedTask.comments}}, (err,deletedItems)=>{
                 if(err){
                     console.log(err);
+                    req.flash('error', err);
                     res.redirect('back');
                 }else{
+                    req.flash('success', 'Task deleted!');
                     res.redirect('/admin');
                 }
             })

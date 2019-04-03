@@ -1,44 +1,40 @@
 <% include ../partials/header.ejs%>
 <div class='container default-page-top-margin medium-item-bottom-margin'>
-    <div class='row justify-content-md-center'>
-        <div class='col-md-9'>
+    <div class='row'>
+        <div class='col-md-4'>
             <div class='container'>
-                <div> <h4 class='float-right'><%=moment(task.date).format('MMM DD YYYY')%></h4></div>
-               
-                <h2><a><%= task.title%> <span class='bold-item'><%=task.status%></span></a></h2>
-                <p><%=task.desc%></p>
-                <p>Created by: <%=task.createdBy.username%></p>
-                <div class='container'>
-                    <div class='row text-center default-item-bottom-margin'>
-                    <div class="col-4">
-                        <%if(task.type == 'item' || task.type == 'batch'){%>
-                            <a class='btn btn-info' href='/batches/<%=task.primaryId%>'>View Item</a>
-                        <%}else if(task.type == 'user'){%>
-                            <a class='btn btn-info' href='/users/<%=task.primaryId%>'>View User</a>
-                        <%}%>
-                    </div>
-                    <div class="col-4">
-                    <a class='btn btn-warning' href='/tasks/<%=task._id%>/edit'>Edit</a>
-                    </div>
-                    <div class="col-4">
-                        <%if(currentUser && currentUser.role == 'admin'){%>
-                            <form class='' method='POST' action='/tasks/<%=task.id%>?_method=PUT'>
-                                <%if(task.status == 'open'){%>
-                                    <input type='hidden' name='task[status]' value='closed'>
-                                    <input type='submit' class='btn btn-danger' value='close'>
-                                <%}else{%>
-                                    <input type='hidden' name='task[status]' value='open'>
-                                    <input type='submit' class='btn btn-success' value='open'>
-                                <%}%>
-                            </form>
-                        <%}%>
-                    </div>                      
-                    </div>
-                </div>
+                <h2 class='text-center'><a><%= task.title%> <span class='bold-item'><%=task.status%></span></a></h2>
+                <label for='date'>Created Date</label>
+                <input class='form-control default-item-bottom-margin' id='date' value='<%=moment(task.date).format('MMM DD YYYY')%>' readonly>
+                <label for='desc'>Description</label>
+                <textarea class='form-control default-item-bottom-margin' id='desc' readonly><%=task.desc%></textarea>
+                <label for='created'>Created By</label>
+                <input class='form-control default-item-bottom-margin' id='created' value='<%=task.createdBy.username%>' readonly>
+                <div class='container default-item-bottom-margin'>
+                    <%if(task.type == 'item' || task.type == 'batch'){%>
+                        <a class='btn btn-info btn-block' href='/batches/<%=task.primaryId%>'>View Item</a>
+                    <%}else if(task.type == 'user'){%>
+                        <a class='btn btn-info btn-block' href='/users/<%=task.primaryId%>'>View User</a>
+                    <%}%>
+                    <a class='btn btn-warning btn-block' href='/tasks/<%=task._id%>/edit'>Edit</a>
+                    <%if(currentUser && currentUser.role == 'admin'){%>
+                        <form class='button-top-margin' method='POST' action='/tasks/<%=task.id%>?_method=PUT'>
+                            <%if(task.status == 'open'){%>
+                                <input type='hidden' name='task[status]' value='closed'>
+                                <input type='submit' class='btn btn-danger btn-block' value='close'>
+                            <%}else{%>
+                                <input type='hidden' name='task[status]' value='open'>
+                                <input type='submit' class='btn btn-success btn-block' value='open'>
+                            <%}%>
+                        </form>
+                    <%}%>
+                 </div>
             </div>
+        </div>
+        <div class='col-md-8'>
             <div class='card card-body bg-light'>
                 <div>
-                    <a href='/tasks/<%=task.id%>/comments/new'  class='btn btn-success float-right'>Add new Comment</a>
+                    <a href='/tasks/<%=task.id%>/comments/new'  class='btn btn-success btn-block'>New Comment</a>
                 </div>
                 <hr>
                 <%task.comments.forEach((comment)=>{%>
@@ -58,11 +54,11 @@
                     <%}%>
                 <hr>
                 <%})%>
+                <div>
+                    <a href='/tasks/<%=task.id%>/comments/new'  class='btn btn-success btn-block'>New Comment</a>
+                </div>
             </div>
-    </div>
-    
-
-      
+        </div>
     </div>
 </div>
 <% include ../partials/footer.ejs%>

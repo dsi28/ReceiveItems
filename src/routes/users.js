@@ -12,11 +12,13 @@ router.get('/:id', middleware.VerifyLoggedUser, middleware.UserIsReal, (req,res)
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }else{
             Task.find({createdBy: foundUser}, (err,foundTasks)=>{
                 if(err){
                     console.log(err);
+                    req.flash('error', err);
                     res.redirect('back');
                 }else{
                     res.render('users/show', {user: foundUser, tasks: foundTasks});
@@ -31,6 +33,7 @@ router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.UserIsReal, midd
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }else{
             res.render('users/edit', {user: foundUser});
@@ -43,6 +46,7 @@ router.put('/:id', middleware.VerifyLoggedUser,  middleware.UserIsReal, middlewa
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }else {
             if(foundUser.role != req.body.user.role){
@@ -50,6 +54,7 @@ router.put('/:id', middleware.VerifyLoggedUser,  middleware.UserIsReal, middlewa
                     Group.findOne({name: foundUser.role},(err,oldGroup)=>{
                         if(err){
                             console.log(err);
+                            req.flash('error', err);
                             res.redirect('back');
                         }else{
                             oldGroup.members = oldGroup.members.filter((a)=>{
@@ -59,6 +64,7 @@ router.put('/:id', middleware.VerifyLoggedUser,  middleware.UserIsReal, middlewa
                             Group.findOne({name: req.body.user.role}, (err,newGroup)=>{
                                 if(err || !newGroup){
                                     console.log(err);
+                                    req.flash('error', err);
                                     res.redirect('back');
                                 }
                                 newGroup.members.push(foundUser);
@@ -71,8 +77,10 @@ router.put('/:id', middleware.VerifyLoggedUser,  middleware.UserIsReal, middlewa
             User.updateOne(foundUser,req.body.user, (err)=>{
                 if(err){
                     console.log(err);
+                    req.flash('error', err);
                     res.redirect('back');
                 }else{
+                    req.flash('success', 'User has been updated!');
                     res.redirect('/users/'+req.params.id);
                 }
             })
@@ -80,29 +88,29 @@ router.put('/:id', middleware.VerifyLoggedUser,  middleware.UserIsReal, middlewa
     })
 });
 
-
 router.delete('/:id', middleware.VerifyLoggedUser, middleware.UserIsReal, middleware.ValidateUserRole,(req,res)=>{
     User.findByIdAndDelete(req.params.id, (err,userToDelete)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }else{
             Group.findOne({name: userToDelete.role}, (err,foundGroup)=>{
                 if(err){
                     console.log(err);
+                    req.flash('error', err);
                     res.redirect('back');
                 }else{
                     foundGroup.members = foundGroup.members.filter((a)=>{
                         return a != userToDelete.id
                     });
                     foundGroup.save();
+                    req.flash('success', 'User has been deleted!');
                     res.redirect('/admin');
                 }
             })
         }
     })
 });
-
-
 
 module.exports=router;

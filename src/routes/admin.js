@@ -14,6 +14,7 @@ router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,r
     .exec((err,foundUserList)=>{
         if(err){
             console.log(err);
+            req.flash('error', err);
             res.redirect('back');
         }else{
             Group.findOne({name: 'admin'})
@@ -21,11 +22,13 @@ router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,r
             .exec((err,foundAdminList)=>{
                 if(err){
                     console.log(err);
+                    req.flash('error', err);
                     res.redirect('back');
                 }else{
                     Task.find({}, (err,foundTasks)=>{
                         if(err){
                             console.log(err);
+                            req.flash('error', err);
                             res.redirect('back');
                         }else{
                             //console.log(foundAdminList);
@@ -39,6 +42,6 @@ router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,r
             });
         }
     });
-})
+});
 
 module.exports = router;

@@ -15,7 +15,6 @@
     width: 30%; 
     margin:20px auto
 }
-
 .center-text-item{
     text-align: center;
 }
@@ -30,6 +29,9 @@
 }
 .medium-item-bottom-margin{
     margin-bottom: 27px;
+}
+.medium-item-top-margin{
+    margin-top: 50px;
 }
 .bold-item{
     font-weight: bold; 

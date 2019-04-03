@@ -1,28 +1,40 @@
 <% include ../partials/header.ejs%>
-<h1>Task</h1>
-
-<%if(tempTask.type=='item'){%>
-<form method='POST' action='/tasks/<%=tempTask.type%>/<%=tempTask.primaryId%>/<%=tempTask.secondaryId%>'>
-<%}else{%>
-<form method='POST' action='/tasks/<%=tempTask.type%>/<%=tempTask.primaryId%>'>
-<%}%>
-    <label for='type'>Type</label>
-    <input type='text' id='type' value='<%=tempTask.type%>' readonly>
-    <%if(tempTask.type=='item'){%>
-        <label for='batch'>Batch Name</label>
-        <input type='text' name='batchName' id='batch' value='<%=tempTask.batchName%>' readonly> 
-        <label for='erpId'>Item ID</label>
-        <input type='text' name='name' id='erpId' value='<%=tempTask.name%>' readonly> 
-    <%}else{%>
-    <label for='name'><%if(tempTask.role=='user'){%>User <%}%> Name</label>
-    <input type='text' name='name' id='name' value='<%=tempTask.name%>' readonly>
-    <%}%>
-    <label for='by'>Created By</label>
-    <input type='text'  id='by' value='<%=currentUser.username%>' readonly>
-    <label for='title'>Title</label>
-    <input type='text' name='task[title]' id='title' placeholer='Task Title'> 
-    <label for='desc'>Description</label>
-    <input type='text' name='task[desc]' id='desc' placeholer='Description'>
-    <input type='submit' value='Create'>
-</form>
+<div class='container default-page-top-margin medium-item-bottom-margin'>
+    <h1 class='center-text-item'>Create Task</h1>
+    <div class='row'>
+        <div class='form-setup'>
+            <%if(tempTask.type=='item'){%>
+                <form method='POST' action='/tasks/<%=tempTask.type%>/<%=tempTask.primaryId%>/<%=tempTask.secondaryId%>'>
+            <%}else{%>
+                <form method='POST' action='/tasks/<%=tempTask.type%>/<%=tempTask.primaryId%>'>
+            <%}%>
+                <div class='form-group'>
+                    <label for='type'>Type</label>
+                    <input class='form-control' type='text' id='type' value='<%=tempTask.type%>' readonly>
+                </div>
+                <%if(tempTask.type=='item'){%>
+                    <label for='batch'>Batch Name</label>
+                    <input class='form-control' type='text' name='batchName' id='batch' value='<%=tempTask.batchName%>' readonly> 
+                    <label for='erpId'>Item ID</label>
+                    <input class='form-control' type='text' name='name' id='erpId' value='<%=tempTask.name%>' readonly> 
+                <%}else{%>
+                    <label for='name'><%if(tempTask.role=='user'){%>User <%}%> Name</label>
+                    <input class='form-control' type='text' name='name' id='name' value='<%=tempTask.name%>' readonly>
+                <%}%>
+                <div class='form-group'>
+                    <label for='by'>Created By</label>
+                    <input class='form-control' type='text'  id='by' value='<%=currentUser.username%>' readonly>                </div> 
+                <div class='form-group'>  
+                    <label for='title'>Title</label>
+                    <input class='form-control' type='text' name='task[title]' id='title' placeholer='Task Title'> 
+                </div> 
+                <div class='form-group'>
+                    <label for='desc'>Description</label>
+                    <input class='default-item-bottom-margin form-control' type='text' name='task[desc]' id='desc' placeholer='Description'>
+                </div> 
+                <button class='btn btn-lg btn-primary btn-block' type='submit'>Create</button>
+            </form>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer.ejs%>

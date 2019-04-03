@@ -19,6 +19,9 @@
 .center-text-item{
     text-align: center;
 }
+.right-text-item{
+    text-align: right;
+}
 .large-text-size{
     font-size: 5rem;
 }
@@ -27,4 +30,7 @@
 }
 .medium-item-bottom-margin{
     margin-bottom: 27px;
+}
+.bold-item{
+    font-weight: bold; 
 }

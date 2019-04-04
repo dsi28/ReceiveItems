@@ -102,5 +102,39 @@
             </div>
         </div>
     </div>
+    <div class='container default-page-top-margin default-item-bottom-margin'>
+        <div class='container'>
+            <div class='row'>
+                    <div class='col-md-12 center-text-item'>
+                        <h2>Groups</h2>
+                    </div>
+                </div>
+            </div>
+            <div class='table-responsive'>
+                <table class="table table-hover table-dark">
+                    <thead class="thead-light">
+                        <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <%groups.forEach((group)=>{%>
+                        <tr>
+                        <td><a href='/groups/<%=group._id%>'><%=group.name%></a></td>
+                        <td><a class='btn btn-outline-warning btn-sm' href='/groups/<%=group._id%>/edit'>Edit</a></td>
+                        <td>
+                        <form method='POST' action='/groups/<%=group.id%>?_method=DELETE'>
+                            <input class='btn btn-outline-danger btn-sm' type='submit' value='Delete'>
+                        </form>
+                        </td>
+                        </tr>
+                    <%})%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <% include ../partials/footer.ejs%>

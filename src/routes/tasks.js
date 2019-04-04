@@ -81,10 +81,7 @@ async (req,res)=>{
                 req.body.task.for = foundGroup;
             });
         }else if(req.user.role == 'admin'){
-            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            console.log(req.body.group);
             await Group.findById(req.body.group, (err,foundGroup)=>{
-                console.log(foundGroup);
                 req.body.task.for = foundGroup;
             });
         }

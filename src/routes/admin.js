@@ -7,7 +7,7 @@ Task = require('../models/task');
 
 
     //routes for : '/admin' 
-
+//makes this async
 router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Group.findOne({name: 'standard'})
     .populate('members')
@@ -31,11 +31,19 @@ router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,r
                             req.flash('error', err);
                             res.redirect('back');
                         }else{
-                            //console.log(foundAdminList);
-                            res.render('admin/index', 
-                            {users: foundUserList.members, 
-                            admins: foundAdminList.members,
-                            tasks: foundTasks});
+                            Group.find({$and: [{name: {$ne: 'standard'}}, {name: {$ne: 'admin'}}]}, (err,groupList)=>{
+                                if(err){
+                                    console.log(err);
+                                    req.flash('error', err.message);
+                                    res.redirect('back');
+                                }else{
+                                    res.render('admin/index', 
+                                    {users: foundUserList.members, 
+                                    admins: foundAdminList.members,
+                                    tasks: foundTasks,
+                                    groups: groupList});
+                                }
+                            });
                         }
                     })
                 }

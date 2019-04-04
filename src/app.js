@@ -32,8 +32,8 @@ mongoose.connect('mongodb://localhost:27017/receive_app', { useNewUrlParser: tru
 app.use(expressSanitizer());
 
 // const Group = require('./models/group');
-// Group.create({name: 'admin'});
-// Group.create({name: 'standard'});
+// Group.create({name: 'admin', role: true});
+// Group.create({name: 'standard', role: true});
 
 app.locals.moment = require('moment');
 

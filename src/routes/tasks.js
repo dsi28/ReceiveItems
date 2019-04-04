@@ -36,7 +36,6 @@ async(req,res)=>{
     try{
         await Group.find({}, (err,foundGroups)=>{
             tempTask.groupLists=foundGroups;
-            console.log(foundGroups);
         });
         if(req.params.type == 'user'){
             await User.findById(req.params.primaryId, (err, foundUser)=>{
@@ -80,19 +79,15 @@ async (req,res)=>{
         if(req.user.role == 'user'){
             await Group.findOne({name: 'admin'}, (err,foundGroup)=>{
                 req.body.task.for = foundGroup;
-                console.log(req.body.userList);
             });
         }else if(req.user.role == 'admin'){
-            if(!req.body.userList){
-                await Group.findOne({name: 'user'}, (err,foundGroup)=>{
-                    req.body.task.for = foundGroup;
-                    console.log(req.body.userList);
-                });
-            }else{
-                //newly created group
-            }
+            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+            console.log(req.body.group);
+            await Group.findById(req.body.group, (err,foundGroup)=>{
+                console.log(foundGroup);
+                req.body.task.for = foundGroup;
+            });
         }
-        
         req.body.task.status = 'open';
         req.body.task.primaryId = req.params.primaryId;
         req.body.task.type = req.params.type;
@@ -109,7 +104,7 @@ async (req,res)=>{
         })
     }catch(err){
         console.log(err);
-        req.flash('error', err);
+        req.flash('error', err.message);
         res.redirect('back');
     }
 });

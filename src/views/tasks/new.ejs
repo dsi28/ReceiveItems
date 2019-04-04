@@ -8,26 +8,25 @@
             <%}else{%>
                 <form method='POST' action='/tasks/<%=tempTask.type%>/<%=tempTask.primaryId%>'>
             <%}%>
-            <%if(currentUser || currentUser.role == 'admin'){%>
+            <%if(currentUser && currentUser.role == 'admin'){%>
                 <div class="form-group" >
-                    <label for="groupList">Groups</label>
+                    <label for="groupList">Task Group</label>
                     <select class="form-control" id='groupList' name='group' required>
-                        <option value='createNewGroup' selected>Create New Group</option>
                     <%tempTask.groupLists.forEach((group)=>{%>
-                        <option value='group'><%=group.name%></option>
+                        <option value='<%=group._id%>'><%=group.name%></option>
                     <%})%>
+                    <option value='createNewGroup'>Create New Group</option>
                     </select>
-                    
                 </div>
-                <a class='btn btn-info btn-block' href='/groups/new'>Create Group</a>
+                <a class='btn btn-info btn-block' id='groupButton' href='/groups/new'>Create Group</a>
             <%}%>
             <div class='form-group'>  
                 <label for='title'>Title</label>
-                <input class='form-control' type='text' name='task[title]' id='title' placeholer='Task Title' disabled required> 
+                <input class='form-control' type='text' name='task[title]' id='title' placeholer='Task Title' required> 
             </div> 
             <div class='form-group'>
                 <label for='desc'>Description</label>
-                <input class=' form-control' type='text' name='task[desc]' id='desc' placeholer='Description' disabled>
+                <input class=' form-control' type='text' name='task[desc]' id='desc' placeholer='Description' >
             </div>
                 <div class='form-group'>
                     <label for='type'>Type</label>
@@ -46,9 +45,11 @@
                     <label for='name'><%if(tempTask.role=='user'){%>User <%}%> Name</label>
                     <input class='form-control' type='text' name='name' id='name' value='<%=tempTask.name%>' readonly>
                 <%}%>
-                
-
-                <button class='btn btn-lg btn-primary btn-block default-page-top-margin' type='submit'>Create</button>
+                <%if(currentUser && currentUser.role == 'admin'){%>
+                    <button class='btn btn-lg btn-primary btn-block default-page-top-margin' id='submitButton' type='submit' disabled>Create</button>
+                <%}else{%>
+                <button class='btn btn-lg btn-primary btn-block default-page-top-margin' id='submitButton' type='submit'>Create</button>
+                <%}%>
             </form>
         </div>
     </div>
@@ -56,13 +57,26 @@
 <script>
 
 $(document).ready(function() {
-    
+    if ($('#groupList option:selected').val() == 'createNewGroup'){
+        $('#groupButton').show();
+        $('#submitButton').prop('disabled', true);
+        $("#title").prop('disabled', true);
+        $("#desc").prop('disabled', true);
+        } else{
+            $('#groupButton').hide();
+            $('#submitButton').prop('disabled', false);
+        } 
     $('#groupList').change(()=> {
         $("#title").prop('disabled', true);
+        $("#desc").prop('disabled', true);
         if ($('#groupList option:selected').val() == 'createNewGroup'){
+            $('#groupButton').show();
+            $('#submitButton').prop('disabled', true);
             $("#title").prop('disabled', true);
             $("#desc").prop('disabled', true);
         }else{
+            $('#submitButton').prop('disabled', false);
+            $('#groupButton').hide();
             $("#title").prop('disabled', false);
             $("#desc").prop('disabled', false);
         }     

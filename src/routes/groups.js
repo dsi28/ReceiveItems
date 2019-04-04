@@ -30,11 +30,9 @@ router.post('/', (req,res)=>{
                 for (const uId of req.body.uList) {
                     await User.findById(uId, (err, foundUser)=>{
                         createdGroup.members.push(foundUser);
-                        console.log(createdGroup.members);
                     });
                 }
                 await createdGroup.save();
-                console.log(createdGroup);
                 req.flash('success', 'Group Created!');
                 res.redirect('/batches');
             }catch(err){

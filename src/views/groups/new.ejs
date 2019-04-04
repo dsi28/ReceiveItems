@@ -28,14 +28,9 @@
 </div>
 
 <script>
-
 $(document).ready(function() {
     
     $('#userList').change(()=> {
-        // let xlist = $('#userList').val();
-        // alert(xlist[0]);
-        // 
-
         let yList=[];
         $('#userList :selected').each(function(){
             if(yList.length==0){
@@ -43,23 +38,11 @@ $(document).ready(function() {
             }else{
                 yList= yList + ', ' + $(this).text();
             }
-            //alert($(this).text());
         });
         $('#members').val(yList);
     });
     
 });
-//     $('#userGroup').prop('checked',true); 
-//     $('.allUserList').hide();  
-//     $('#createGroup').on('click', ()=>{
-//         $('.allUserList').show();  
-//         $( '#userList' ).prop( 'disabled', false);  
-//     });
-//     $('#userGroup').on('click', ()=>{
-//         $('.allUserList').hide();  
-//         $( '.userList' ).prop( 'disabled', true);  
-//     });
-
 </script>
 
 <% include ../partials/footer.ejs%>

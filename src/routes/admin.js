@@ -31,7 +31,7 @@ router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,r
                             req.flash('error', err);
                             res.redirect('back');
                         }else{
-                            Group.find({$and: [{name: {$ne: 'standard'}}, {name: {$ne: 'admin'}}]}, (err,groupList)=>{
+                            Group.find({role: false}, (err,groupList)=>{
                                 if(err){
                                     console.log(err);
                                     req.flash('error', err.message);

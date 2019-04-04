@@ -44,4 +44,18 @@ router.post('/', (req,res)=>{
     });
 });
 
+
+//show
+router.get('/:id', (req,res)=>{
+    Group.findById(req.params.id).populate('members').exec((err,foundGroup)=>{
+        if(err){
+            console.log(err);
+            req.flash('error', err.message);
+            res.redirect('back');
+        }else{
+            res.render('groups/show', {group: foundGroup});
+        }
+    });
+});
+
 module.exports = router;

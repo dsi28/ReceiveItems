@@ -1,0 +1,21 @@
+<% include ../partials/header.ejs%>
+    <div class='container default-page-top-margin'>
+        <div class='row justify-content-md-center default-item-bottom-margin'>
+            <div class='col-md-6'>
+                <div class='container'>
+                    <h1 class='center-text-item'><%=group.name%></h1>
+                    <div class='container'>
+                        <label class='default-item-top-margin' for='name'>Task Group</label>
+                        <input class='form-control default-item-bottom-margin' id='name' value='<%=group.name%>' readonly>
+                        <label for='members'>Members</label>
+                        <textarea class='form-control default-item-bottom-margin' readonly><%group.members.forEach((member)=>{%><%=member.username+'\n'%><%})%></textarea>
+                    </div>
+                    <a class='button-top-margin btn btn-warning btn-block' href='/groups/<%=group.id%>/edit'>Edit</a>
+                    <form method='POST' action='/groups/<%=group.id%>?_method=DELETE'>
+                        <input class='button-top-margin default-item-bottom-margin btn btn-danger btn-block' type='submit' value='Delete'>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<% include ../partials/footer.ejs%>

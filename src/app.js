@@ -19,7 +19,8 @@ authRouter = require('./routes/auth'),
 userRouter = require('./routes/users'),
 adminRouter = require('./routes/admin'),
 taskRouter = require('./routes/tasks'),
-commentRouter = require('./routes/comments'); 
+commentRouter = require('./routes/comments'),
+groupRouter = require('./routes/groups'); 
 
 //app config
 app.use(methodOverride('_method'));
@@ -63,11 +64,13 @@ app.get('/', (req, res)=>{
 });
 
 app.use('/auth', authRouter);
+app.use('/groups', groupRouter);
 app.use('/batches', batchRouter);
 app.use('/batches/:id/items', itemRouter);
 app.use('/users', userRouter);
 app.use('/admin', adminRouter);
 app.use('/tasks/:id/comments', commentRouter);
 app.use('/tasks', taskRouter);
+
 
 app.listen(3000,()=>{console.log('App is alive...')})

@@ -1,0 +1,65 @@
+<% include ../partials/header.ejs%>
+<div class='container default-page-top-margin'>
+    <h2 class='center-text-item'>Create Group</h1>
+    <div class='row'>
+        <div class='form-setup'>
+            <form method='POST' action='/groups'>
+                <div class='form-group'>
+                    <label for='name'>Name</label>
+                    <input class='form-control' type='text' name='name' id='name' placeholder='group name'>
+                </div>
+                <div class='form-group'>
+                <label for='userList'>Users</label>
+                <select multiple class='form-control'name='uList' id='userList'>
+                    <%userList.forEach((user)=>{%>
+                        <option value='<%=user._id%>'><%=user.username%></option>
+                    <%})%>
+                </select>
+                </div>
+                <div class='form-group'>
+                    <label for='members'>Members</label>
+                    <textarea name='members' id='members' class='form-control' readonly></textarea>
+                </div>
+                <input class='btn btn-success btn-block' type='submit' value='Create'>
+            </form>
+            <a href='/batches'>Back!</a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+$(document).ready(function() {
+    
+    $('#userList').change(()=> {
+        // let xlist = $('#userList').val();
+        // alert(xlist[0]);
+        // 
+
+        let yList=[];
+        $('#userList :selected').each(function(){
+            if(yList.length==0){
+                yList = $(this).text();
+            }else{
+                yList= yList + ', ' + $(this).text();
+            }
+            //alert($(this).text());
+        });
+        $('#members').val(yList);
+    });
+    
+});
+//     $('#userGroup').prop('checked',true); 
+//     $('.allUserList').hide();  
+//     $('#createGroup').on('click', ()=>{
+//         $('.allUserList').show();  
+//         $( '#userList' ).prop( 'disabled', false);  
+//     });
+//     $('#userGroup').on('click', ()=>{
+//         $('.allUserList').hide();  
+//         $( '.userList' ).prop( 'disabled', true);  
+//     });
+
+</script>
+
+<% include ../partials/footer.ejs%>

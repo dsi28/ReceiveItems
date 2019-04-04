@@ -26,49 +26,73 @@ router.get('/:id', middleware.TaskIsReal, (req,res)=>{
 });
 
 // new: As of now only items tasks will have two ids
-router.get('/:type/:primaryId/:secondaryId?/new', middleware.VerifyLoggedUser, middleware.VerifyNewAndCreateTask, (req,res)=>{
+router.get('/:type/:primaryId/:secondaryId?/new', 
+middleware.VerifyLoggedUser, 
+middleware.VerifyNewAndCreateTask, 
+async(req,res)=>{
     let tempTask = {
         type: req.params.type,
     }
-    if(req.params.type == 'user'){
-        User.findById(req.params.primaryId, (err, foundUser)=>{
-            if(err){
-                console.log(err);
-                req.flash('error', err);
-                return res.redirect('back');
-            }
-            console.log('UUUUUUUUUUSER')
-            tempTask.primaryId = foundUser.id;
-            tempTask.name = foundUser.username;
-            return res.render('tasks/new', {tempTask:tempTask});
+    try{
+        await Group.find({}, (err,foundGroups)=>{
+            tempTask.groupLists=foundGroups;
+            console.log(foundGroups);
         });
-    }else{     
-        Batch.findById(req.params.primaryId, (err,foundBatch)=>{
-            if(!req.params.secondaryId){
-                console.log('BAAAAAAAAAAAAAAAAAAAAAAATCH');
-                tempTask.primaryId = foundBatch.id;
-                tempTask.name = foundBatch.name;
+        if(req.params.type == 'user'){
+            await User.findById(req.params.primaryId, (err, foundUser)=>{
+                console.log('UUUUUUUUUUSER')
+                tempTask.primaryId = foundUser.id;
+                tempTask.name = foundUser.username;
                 return res.render('tasks/new', {tempTask:tempTask});
-            }else{
-                console.log('ITEMMMMMMMMMMMMMMMMMMMMMMMMMMMM');
-                Item.findById(req.params.secondaryId, (err,foundItem)=>{
+            });
+        }else{     
+            await Batch.findById(req.params.primaryId, (err,foundBatch)=>{
+                if(!req.params.secondaryId){
+                    console.log('BAAAAAAAAAAAAAAAAAAAAAAATCH');
                     tempTask.primaryId = foundBatch.id;
-                    tempTask.secondaryId = foundItem.id;
-                    tempTask.name = foundItem.erpId;
-                    tempTask.batchName = foundBatch.name;
+                    tempTask.name = foundBatch.name;
                     return res.render('tasks/new', {tempTask:tempTask});
-                })
-            }
-        })
+                }else{
+                    console.log('ITEMMMMMMMMMMMMMMMMMMMMMMMMMMMM');
+                    Item.findById(req.params.secondaryId, (err,foundItem)=>{
+                        tempTask.primaryId = foundBatch.id;
+                        tempTask.secondaryId = foundItem.id;
+                        tempTask.name = foundItem.erpId;
+                        tempTask.batchName = foundBatch.name;
+                        return res.render('tasks/new', {tempTask:tempTask});
+                    })
+                }
+            })
+        }
+    }catch(err){
+        console.log(err);
+        req.flash('error', err);
+        return res.redirect('back');
     }
 });
 
 //create route 
-router.post('/:type/:primaryId/:secondaryId?', middleware.VerifyLoggedUser, middleware.VerifyNewAndCreateTask, async (req,res)=>{
+router.post('/:type/:primaryId/:secondaryId?', 
+middleware.VerifyLoggedUser, 
+middleware.VerifyNewAndCreateTask, 
+async (req,res)=>{
     try{
-        await Group.findOne({name: 'admin'}, (err,foundGroup)=>{
-            req.body.task.for = foundGroup;
-        });
+        if(req.user.role == 'user'){
+            await Group.findOne({name: 'admin'}, (err,foundGroup)=>{
+                req.body.task.for = foundGroup;
+                console.log(req.body.userList);
+            });
+        }else if(req.user.role == 'admin'){
+            if(!req.body.userList){
+                await Group.findOne({name: 'user'}, (err,foundGroup)=>{
+                    req.body.task.for = foundGroup;
+                    console.log(req.body.userList);
+                });
+            }else{
+                //newly created group
+            }
+        }
+        
         req.body.task.status = 'open';
         req.body.task.primaryId = req.params.primaryId;
         req.body.task.type = req.params.type;

@@ -51,7 +51,7 @@ middleware.ValidateUserRole = (req,res,next)=>{
     User.findById(req.user._id, (err,foundUser)=>{
         if(err ){
             console.log(err);
-            req.flash('error', err);
+            req.flash('error', err.message);
             res.redirect('back');
         }else{
             if(foundUser.role == 'admin'){

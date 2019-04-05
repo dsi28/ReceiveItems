@@ -1,12 +1,13 @@
 const express = require('express'),
 router = express.Router({mergeParams:true}),
 Group = require('../models/group'),
-User = require('../models/user');
+User = require('../models/user'),
+middleware = require('../middleware');
 
     //routes for: /groups
 
 //new
-router.get('/new', (req,res)=>{
+router.get('/new', middleware.VerifyLoggedUser, middleware.ValidateUserRole,(req,res)=>{
     User.find({}, (err,foundUsers)=>{
         if(err){
             console.log(err);
@@ -19,7 +20,7 @@ router.get('/new', (req,res)=>{
 });
 
 //create
-router.post('/', (req,res)=>{
+router.post('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Group.create({name: req.body.name}, async(err,createdGroup)=>{
         if(err){
             console.log(err);
@@ -44,9 +45,8 @@ router.post('/', (req,res)=>{
     });
 });
 
-
 //show
-router.get('/:id', (req,res)=>{
+router.get('/:id', middleware.VerifyLoggedUser, (req,res)=>{
     Group.findById(req.params.id)
     .populate('members')
     .exec((err,foundGroup)=>{
@@ -61,7 +61,7 @@ router.get('/:id', (req,res)=>{
 });
 
 //edit
-router.get('/:id/edit', (req,res)=>{
+router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Group.findById(req.params.id)
     .populate('members')
     .exec((err,foundGroup)=>{
@@ -90,7 +90,7 @@ router.get('/:id/edit', (req,res)=>{
 });
 
 //update
-router.put('/:id', (req,res)=>{
+router.put('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     User.find({_id: {$in: req.body.check}}, (err,groupMembers)=>{
         if(err){
             console.log(err);
@@ -114,7 +114,7 @@ router.put('/:id', (req,res)=>{
 });
 
 //delete
-router.delete('/:id', (req,res)=>{
+router.delete('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Group.findByIdAndDelete(req.params.id, (err)=>{
         if(err){
             console.log(err);

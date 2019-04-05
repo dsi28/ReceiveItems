@@ -10,10 +10,12 @@
                         <label for='members'>Members</label>
                         <textarea class='form-control default-item-bottom-margin' readonly><%group.members.forEach((member)=>{%><%=member.username+'\n'%><%})%></textarea>
                     </div>
-                    <a class='button-top-margin btn btn-warning btn-block' href='/groups/<%=group.id%>/edit'>Edit</a>
-                    <form method='POST' action='/groups/<%=group.id%>?_method=DELETE'>
-                        <input class='button-top-margin default-item-bottom-margin btn btn-danger btn-block' type='submit' value='Delete'>
-                    </form>
+                    <%if(currentUser && currentUser.role == 'admin'){%>
+                        <a class='button-top-margin btn btn-warning btn-block' href='/groups/<%=group.id%>/edit'>Edit</a>
+                        <form method='POST' action='/groups/<%=group.id%>?_method=DELETE'>
+                            <input class='button-top-margin default-item-bottom-margin btn btn-danger btn-block' type='submit' value='Delete'>
+                        </form>
+                    <%}%>
                 </div>
             </div>
         </div>

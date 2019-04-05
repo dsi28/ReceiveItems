@@ -16,7 +16,8 @@ router.get('/:id', middleware.TaskIsReal, (req,res)=>{
     .populate('createdBy')
     .populate('comments')
     .exec((err,foundTask)=>{
-        if(err){
+        console.log(foundTask);
+        if(err && !foundTask){
             console.log(err);
             req.flash('error', err);
             res.redirect('back');
@@ -45,7 +46,7 @@ async(req,res)=>{
         type: req.params.type,
     }
     try{
-        await Group.find({}, (err,foundGroups)=>{
+        await Group.find({role: false}, (err,foundGroups)=>{
             tempTask.groupLists=foundGroups;
         });
         if(req.params.type == 'user'){

@@ -28,6 +28,7 @@
                     <thead>
                         <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">Status</th>
                         <th scope="col"></th>
                         </tr>
                     </thead>
@@ -35,6 +36,7 @@
                 <%tasks.forEach((task)=>{%>
                         <tr>
                         <td><a href='/tasks/<%=task._id%>'><%=task.title%></a></td>
+                        <td><%=task.status%></td>
                         <td><a class='btn btn-warning btn-sm' href='/tasks/<%=task._id%>/edit'>Edit</a></td>
                         </tr>
                 <%})%>
@@ -48,6 +50,7 @@
                     <thead>
                         <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">Status</th>
                         <th scope="col"></th>
                         </tr>
                     </thead>
@@ -55,6 +58,7 @@
                 <%memberTasks.forEach((task)=>{%>
                         <tr>
                         <td><a href='/tasks/<%=task._id%>'><%=task.title%></a></td>
+                        <td><%=task.status%></td>
                         <td><a class='btn btn-warning btn-sm' href='/tasks/<%=task._id%>/edit'>Edit</a></td>
                         </tr>
                 <%})%>

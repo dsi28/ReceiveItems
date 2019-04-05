@@ -81,6 +81,7 @@
                     <thead class="thead-light">
                         <tr>
                         <th scope="col">Title</th>
+                        <th scope="col">Status</th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                         </tr>
@@ -89,6 +90,7 @@
                     <%tasks.forEach((t)=>{%>
                         <tr>
                         <td><a href='/tasks/<%=t._id%>'><%=t.title%></a></td>
+                        <td><%=t.status%></td>
                         <td><a class='btn btn-outline-warning btn-sm' href='/tasks/<%=t._id%>/edit'>Edit</a></td>
                         <td>
                         <form method='POST' action='/tasks/<%=t.id%>?_method=DELETE'>

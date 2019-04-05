@@ -3,9 +3,9 @@
         <div class='row justify-content-md-center default-item-bottom-margin'>
             <div class='col-md-6'>
                 <div class='container'>
-                    <h1 class='center-text-item'><%=group.name%></h1>
+                    <h1 class='center-text-item'>Group Details</h1>
                     <div class='container'>
-                        <label class='default-item-top-margin' for='name'>Task Group</label>
+                        <label class='default-item-top-margin' for='name'>Name</label>
                         <input class='form-control default-item-bottom-margin' id='name' value='<%=group.name%>' readonly>
                         <label for='members'>Members</label>
                         <textarea class='form-control default-item-bottom-margin' readonly><%group.members.forEach((member)=>{%><%=member.username+'\n'%><%})%></textarea>

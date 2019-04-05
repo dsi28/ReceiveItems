@@ -47,7 +47,9 @@ router.post('/', (req,res)=>{
 
 //show
 router.get('/:id', (req,res)=>{
-    Group.findById(req.params.id).populate('members').exec((err,foundGroup)=>{
+    Group.findById(req.params.id)
+    .populate('members')
+    .exec((err,foundGroup)=>{
         if(err){
             console.log(err);
             req.flash('error', err.message);
@@ -56,6 +58,72 @@ router.get('/:id', (req,res)=>{
             res.render('groups/show', {group: foundGroup});
         }
     });
+});
+
+//edit
+router.get('/:id/edit', (req,res)=>{
+    Group.findById(req.params.id)
+    .populate('members')
+    .exec((err,foundGroup)=>{
+        if(err){
+            console.log(err);
+            req.flash('error', err.message);
+            res.redirect('back');
+        }else{
+            User.find({}, (err,userList)=>{
+                if(err){
+                    console.log(err);
+                    req.flash('error', err.message);
+                }else{
+                    for (const mem of foundGroup.members) {
+                        userList = userList.filter((a)=>{
+                            if( a.username != mem.username){
+                                return a;
+                            }  
+                        })
+                    }
+                    res.render('groups/edit', {group: foundGroup, userList:userList});
+                }
+            });
+        }
+    });
+});
+
+//update
+router.put('/:id', (req,res)=>{
+    User.find({_id: {$in: req.body.check}}, (err,groupMembers)=>{
+        if(err){
+            console.log(err);
+            req.flash('error', err.message);
+            res.redirect('back');
+        }else{
+            Group.findById(req.params.id, (err, updatedGroup)=>{
+                if(err){
+                    console.log(err);
+                    req.flash('error', err.message);
+                    res.redirect('back');
+                }else{
+                    updatedGroup.name =  req.body.name;
+                    updatedGroup.members = groupMembers;
+                    updatedGroup.save();
+                    res.redirect('/groups/'+updatedGroup._id);
+                }
+            })
+        }
+    })
+});
+
+//delete
+router.delete('/:id', (req,res)=>{
+    Group.findByIdAndDelete(req.params.id, (err)=>{
+        if(err){
+            console.log(err);
+            req.flash('error', err.message);
+            res.redirect('back');
+        }else{
+            res.redirect('/admin');
+        }
+    })
 });
 
 module.exports = router;

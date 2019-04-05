@@ -155,8 +155,10 @@ router.put('/:id', middleware.VerifyLoggedUser, middleware.TaskIsReal, middlewar
             req.flash('error', err);
             res.redirect('back'); 
         }else{
-            editTask.for = req.body.group;
-            editTask.save();
+            if(req.body.group){
+                editTask.for = req.body.group;
+                editTask.save();
+            }            
             req.flash('success', 'Task has been updated!');
             res.redirect('/tasks/'+editTask._id);
         }

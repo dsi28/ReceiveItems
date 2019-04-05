@@ -16,7 +16,6 @@ router.get('/:id', middleware.TaskIsReal, (req,res)=>{
     .populate('createdBy')
     .populate('comments')
     .exec((err,foundTask)=>{
-        console.log(foundTask);
         if(err && !foundTask){
             console.log(err);
             req.flash('error', err);

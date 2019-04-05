@@ -21,7 +21,23 @@ router.get('/:id', middleware.VerifyLoggedUser, middleware.UserIsReal, (req,res)
                     req.flash('error', err);
                     res.redirect('back');
                 }else{
-                    res.render('users/show', {user: foundUser, tasks: foundTasks});
+                    Group.find({members: {$all: foundUser}}, (err,foundGroups)=>{
+                        if(err){
+                            console.log(err);
+                            req.flash('error', err);
+                            res.redirect('back');
+                        }else{
+                            Task.find({for: {$in: foundGroups}}, (err,memberTasks)=>{
+                                if(err){
+                                    console.log(err);
+                                    req.flash('error', err);
+                                    res.redirect('back');
+                                }else{
+                                    res.render('users/show', {user: foundUser, tasks: foundTasks, memberTasks: memberTasks});
+                                }
+                            })
+                        }
+                    });
                 }
             });
         }

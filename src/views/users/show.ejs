@@ -11,7 +11,7 @@
                     <input class='form-control default-item-bottom-margin' id='email' value='<%=user.email%>' readonly>        
                 </div>
                 <a class='btn  btn-info btn-block' href='/auth/<%=user.id%>/reset'>Password Reset</a>
-                <a class='btn btn-primary btn-block' >Task</a>
+                <a class='btn btn-primary btn-block'  href='/tasks/user/<%=user.id%>/new' >Task</a>
                 <a class='button-top-margin btn btn-warning btn-block' href='/users/<%=user.id%>/edit'>Edit</a>
                 <%if(currentUser && currentUser.role == 'admin' && currentUser.username != user.username){%>
                     <form method='POST' action='/users/<%=user.id%>?_method=DELETE'>
@@ -23,7 +23,7 @@
         <div class='col-md-8'>
             <div class='container'>
                 <hr>
-                <h2>Tasks</h2>
+                <h2>Created Tasks</h2>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -33,6 +33,26 @@
                     </thead>
                     <tbody>
                 <%tasks.forEach((task)=>{%>
+                        <tr>
+                        <td><a href='/tasks/<%=task._id%>'><%=task.title%></a></td>
+                        <td><a class='btn btn-warning btn-sm' href='/tasks/<%=task._id%>/edit'>Edit</a></td>
+                        </tr>
+                <%})%>
+                    </tbody>
+                </table>
+                </div>
+                <div class='container'>
+                <hr>
+                <h2>Member Tasks</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                <%memberTasks.forEach((task)=>{%>
                         <tr>
                         <td><a href='/tasks/<%=task._id%>'><%=task.title%></a></td>
                         <td><a class='btn btn-warning btn-sm' href='/tasks/<%=task._id%>/edit'>Edit</a></td>

@@ -4,12 +4,18 @@
         <div class='col-md-4'>
             <div class='container'>
                 <h2 class='text-center'><a><%= task.title%> <span class='bold-item'><%=task.status%></span></a></h2>
+                <label for='created'>Created By</label>
+                <input class='form-control default-item-bottom-margin' id='created' value='<%=task.createdBy.username%>' readonly>
                 <label for='date'>Created Date</label>
                 <input class='form-control default-item-bottom-margin' id='date' value='<%=moment(task.date).format('MMM DD YYYY')%>' readonly>
                 <label for='desc'>Description</label>
                 <textarea class='form-control default-item-bottom-margin' id='desc' readonly><%=task.desc%></textarea>
-                <label for='created'>Created By</label>
-                <input class='form-control default-item-bottom-margin' id='created' value='<%=task.createdBy.username%>' readonly>
+                <div class=''>
+                    <label class='' for='name'>Group Name</label>
+                    <input class='form-control default-item-bottom-margin' id='name' value='<%=group.name%>' readonly>
+                    <label for='members'>Group Members</label>
+                    <textarea class='form-control default-item-bottom-margin' readonly><%group.members.forEach((member)=>{%><%=member.username+'\n'%><%})%></textarea>
+                </div>
                 <div class='container default-item-bottom-margin'>
                     <%if(task.type == 'item' || task.type == 'batch'){%>
                         <a class='btn btn-info btn-block' href='/batches/<%=task.primaryId%>'>View Item</a>

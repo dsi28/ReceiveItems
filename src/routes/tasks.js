@@ -20,8 +20,19 @@ router.get('/:id', middleware.TaskIsReal, (req,res)=>{
             console.log(err);
             req.flash('error', err);
             res.redirect('back');
+        }else{
+            Group.findById(foundTask.for._id)
+            .populate('members')
+            .exec((err,foundGroup)=>{
+                if(err){
+                    console.log(err);
+                    req.flash('error', err);
+                    res.redirect('back');
+                }else{
+                    res.render('tasks/show', {task: foundTask, group: foundGroup});
+                }
+            })
         }
-        res.render('tasks/show', {task: foundTask});
     })
 });
 
@@ -76,7 +87,7 @@ middleware.VerifyLoggedUser,
 middleware.VerifyNewAndCreateTask, 
 async (req,res)=>{
     try{
-        if(req.user.role == 'user'){
+        if(req.user.role == 'standard'){
             await Group.findOne({name: 'admin'}, (err,foundGroup)=>{
                 req.body.task.for = foundGroup;
             });

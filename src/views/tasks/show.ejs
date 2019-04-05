@@ -15,7 +15,14 @@
                     <input class='form-control default-item-bottom-margin' id='name' value='<%=group.name%>' readonly>
                     <label for='members'>Group Members</label>
                     <textarea class='form-control default-item-bottom-margin' readonly><%group.members.forEach((member)=>{%><%=member.username+'\n'%><%})%></textarea>
+                    <%if(currentUser && currentUser.role == 'admin'){%>
+                        <div class='center-text-item'> 
+                            <a class='btn btn-warning btn-sm' href='/groups/<%=group._id%>/edit'>Edit Group</a>
+                        </div>
+                    <%}%>
                 </div>
+                <label for='type'>Type</label>
+                <input class='form-control default-item-bottom-margin' id='type' value='<%=task.type%>' readonly>
                 <div class='container default-item-bottom-margin'>
                     <%if(task.type == 'item' || task.type == 'batch'){%>
                         <a class='btn btn-info btn-block' href='/batches/<%=task.primaryId%>'>View Item</a>

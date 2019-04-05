@@ -122,13 +122,27 @@ async (req,res)=>{
 router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.TaskIsReal, middleware.OwnerOrAdminTask, (req,res)=>{
     Task.findById(req.params.id)
     .populate('createdBy')
+    .populate('for')
     .exec((err,foundTask)=>{
         if(err){
             console.log(err);
             req.flash('error', err);
             res.redirect('back');
         }else{
-            res.render('tasks/edit', {task:foundTask});
+            Group.find({role: false}, (err,foundGroups)=>{
+                if(err){
+                    console.log(err);
+                    req.flash('error', err);
+                    res.redirect('back');
+                }else{
+                    foundGroups = foundGroups.filter((a)=>{
+                        if(a.id != foundTask.for._id){
+                            return a;
+                        }
+                    });
+                    res.render('tasks/edit', {task:foundTask, groups: foundGroups});
+                }
+            }); 
         }
     })
 });
@@ -140,6 +154,8 @@ router.put('/:id', middleware.VerifyLoggedUser, middleware.TaskIsReal, middlewar
             req.flash('error', err);
             res.redirect('back'); 
         }else{
+            editTask.for = req.body.group;
+            editTask.save();
             req.flash('success', 'Task has been updated!');
             res.redirect('/tasks/'+editTask._id);
         }

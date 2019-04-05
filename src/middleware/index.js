@@ -4,7 +4,8 @@ Item = require('../models/item'),
 fs = require('fs'),
 Task = require('../models/task'),
 Batch = require('../models/batch'),
-Comment = require('../models/comment');
+Comment = require('../models/comment'),
+Group = require('../models/group');
 
 middleware.VerifyLoggedUser = (req,res,next)=>{
     if(req.isAuthenticated()){

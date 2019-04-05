@@ -70,21 +70,27 @@ router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.GroupIsReal, mid
             req.flash('error', err.message);
             res.redirect('back');
         }else{
-            User.find({}, (err,userList)=>{
-                if(err){
-                    console.log(err);
-                    req.flash('error', err.message);
-                }else{
-                    for (const mem of foundGroup.members) {
-                        userList = userList.filter((a)=>{
-                            if( a.username != mem.username){
-                                return a;
-                            }  
-                        })
+            if(!foundGroup.role){ 
+                User.find({}, (err,userList)=>{
+                    if(err){
+                        console.log(err);
+                        req.flash('error', err.message);
+                    }else{
+                        for (const mem of foundGroup.members) {
+                            userList = userList.filter((a)=>{
+                                if( a.username != mem.username){
+                                    return a;
+                                }  
+                            })
+                        }
+                        res.render('groups/edit', {group: foundGroup, userList:userList});
                     }
-                    res.render('groups/edit', {group: foundGroup, userList:userList});
-                }
             });
+        }else{
+            console.log('cannot edit role group');
+            req.flash('error', 'Cannot edit role groups.');
+            res.redirect('back');
+        }
         }
     });
 });

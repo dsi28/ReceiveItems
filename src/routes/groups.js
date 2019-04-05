@@ -46,7 +46,7 @@ router.post('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,
 });
 
 //show
-router.get('/:id', middleware.VerifyLoggedUser, (req,res)=>{
+router.get('/:id', middleware.VerifyLoggedUser, middleware.GroupIsReal, (req,res)=>{
     Group.findById(req.params.id)
     .populate('members')
     .exec((err,foundGroup)=>{
@@ -61,7 +61,7 @@ router.get('/:id', middleware.VerifyLoggedUser, (req,res)=>{
 });
 
 //edit
-router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
+router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.GroupIsReal, middleware.ValidateUserRole, (req,res)=>{
     Group.findById(req.params.id)
     .populate('members')
     .exec((err,foundGroup)=>{
@@ -90,7 +90,7 @@ router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.ValidateUserRole
 });
 
 //update
-router.put('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
+router.put('/:id', middleware.VerifyLoggedUser, middleware.GroupIsReal, middleware.ValidateUserRole, (req,res)=>{
     User.find({_id: {$in: req.body.check}}, (err,groupMembers)=>{
         if(err){
             console.log(err);
@@ -114,7 +114,7 @@ router.put('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (re
 });
 
 //delete
-router.delete('/:id', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
+router.delete('/:id', middleware.VerifyLoggedUser, middleware.GroupIsReal, middleware.ValidateUserRole, (req,res)=>{
     Group.findByIdAndDelete(req.params.id, (err)=>{
         if(err){
             console.log(err);

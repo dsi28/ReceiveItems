@@ -192,6 +192,19 @@ middleware.TaskIsReal = (req,res,next)=>{
     })
 };
 
+middleware.GroupIsReal = (req,res,next)=>{
+    Group.findById(req.params.id, (err,foundGroup)=>{
+        if(err || !foundGroup){
+            console.log(err);
+            console.log('task not found');
+            req.flash('error', 'Task could not be found ' );
+            res.redirect('back');
+        }else{ 
+            next();
+        }
+    })
+};
+
 middleware.VerifyNewAndCreateTask = (req,res,next)=>{
     switch (req.params.type) {
         case 'user':

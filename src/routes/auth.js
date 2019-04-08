@@ -119,7 +119,7 @@ router.get('/:id/reset',
                     res.redirect('/users/'+req.params.id);
             });
             req.flash('success', 'Password Reset email has been sent...');
-            res.redirect('/batches');
+            res.redirect('back');
         })
 });
 

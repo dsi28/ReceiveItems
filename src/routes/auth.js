@@ -19,7 +19,7 @@ router.post('/register', (req,res)=>{
     let user = {
         username: req.body.username,
         email: req.body.email,
-        role: req.body.role
+        role: 'standard'
     }
     User.register(new User(user), 
         req.body.password, 

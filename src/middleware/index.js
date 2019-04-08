@@ -120,7 +120,7 @@ middleware.UserNotNull = (req,res,next)=>{
         if(err || !foundUser){
             console.log(err);
             console.log('User not found');
-            req.flash('error', 'User not found ' + err);
+            req.flash('error', 'User not found ' );
             res.redirect('back');
         }else{
             next();
@@ -132,7 +132,7 @@ middleware.UserEmailNotNull = (req,res,next)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(!foundUser.email){
             console.log('add email to user then try again');
-            req.flash('error', 'add email to user then try again: '+ err);
+            req.flash('error', 'add email to user then try again: ');
             res.redirect('/users/'+req.params.id+'/edit');
         }else{
             next();
@@ -145,7 +145,7 @@ middleware.BatchIsReal = (req,res,next)=>{
         if(err || !foundBatch){
             console.log(err);
             console.log('batch could not be found');
-            req.flash('error', 'batch could not be found: '+ err);
+            req.flash('error', 'batch could not be found: ');
             res.redirect('back');
         }else{
             next();

@@ -59,12 +59,6 @@ router.get('/logout', (req,res)=>{
     res.redirect('/batches');
 });
 
-
-
-
-
-
-
 //// pasword reset 
 
 router.get('/:id/passwordReset', middleware.VerifyLoggedUser, middleware.OwnerOrAdminUser, middleware.UserEmailNotNull, (req,res)=>{
@@ -125,7 +119,7 @@ router.get('/:id/reset',
                     res.redirect('/users/'+req.params.id);
             });
             req.flash('success', 'Password Reset email has been sent...');
-            res.redirect('back');
+            res.redirect('/batches');
         })
 });
 
@@ -194,7 +188,10 @@ router.post('/reset/:token', (req,res)=>{
         ], function(err) {
             req.flash('error', 'Could not update password: '+ error.message);
             res.redirect('/batches');
-	    });
+        });
+        req.logOut();
+        req.flash('success', 'Login with your new password!');
+        res.redirect('/auth/login');
 });
 //end auth routes
 

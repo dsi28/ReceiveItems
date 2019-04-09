@@ -1,3 +1,4 @@
+//require statements
 const middleware = {},
 User = require('../models/user'),
 Item = require('../models/item'),
@@ -7,6 +8,8 @@ Batch = require('../models/batch'),
 Comment = require('../models/comment'),
 Group = require('../models/group');
 
+//verfies that the user is logged in.
+//if not redirects user to login page
 middleware.VerifyLoggedUser = (req,res,next)=>{
     if(req.isAuthenticated()){
         return next();
@@ -15,6 +18,11 @@ middleware.VerifyLoggedUser = (req,res,next)=>{
     res.redirect('/auth/login');
 };
 
+//check to see if there is an file(image) already associated with a given item and deletes it
+//this requires the use of the fs package
+//using the imgPath stat will determine wether the file exsists.
+//if stat has an err.code == 'ENOENT' the file does not exsist and the app's flow will proceed with next()
+//if stat finds the file using the unlink method the file will be deleted and the app's flow will proceed with next()
 middleware.DeleteImage = (req,res,next)=>{
     Item.findById(req.params.itemId, (err,foundItem)=>{
         if(err){
@@ -66,6 +74,7 @@ middleware.ValidateUserRole = (req,res,next)=>{
     })
 };
 
+//verifies that the user is an admin or the creator/onwer of a given task
 middleware.OwnerOrAdminTask = (req,res,next)=>{
     Task.findById(req.params.id, (err,foundTask)=>{
         if(err || (req.user.role != 'admin' && req.user.id != foundTask.createdBy)){
@@ -78,6 +87,7 @@ middleware.OwnerOrAdminTask = (req,res,next)=>{
     })
 };
 
+//verifies that the user is an admin or is the given user
 middleware.OwnerOrAdminUser = (req,res,next)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err || (req.user.role != 'admin' && req.user.username != foundUser.username)){
@@ -90,6 +100,7 @@ middleware.OwnerOrAdminUser = (req,res,next)=>{
     })
 };
 
+//verifies that the user is an admin or the creator/onwer of a given comment
 middleware.OwnerOrAdminComment = (req,res,next)=>{
     Comment.findById(req.params.commentId, (err,foundComment)=>{
         if(err || !foundComment|| (req.user.role != 'admin' && req.user.username != foundComment.createdBy.username)){
@@ -102,6 +113,7 @@ middleware.OwnerOrAdminComment = (req,res,next)=>{
     })
 };
 
+//verifies that the user is an admin or the creator/onwer of a given batch
 middleware.OwnerOrAdminBatch = (req,res,next)=>{
     Batch.findById(req.params.commentId, (err,foundBatch)=>{
         if(err || (req.user.role != 'admin' && req.user.username != foundBatch.createdBy.username)){
@@ -114,7 +126,7 @@ middleware.OwnerOrAdminBatch = (req,res,next)=>{
     })
 };
 
-
+//verifies that the user._id being used to make a request is a valid user.
 middleware.UserNotNull = (req,res,next)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err || !foundUser){
@@ -128,6 +140,7 @@ middleware.UserNotNull = (req,res,next)=>{
     })
 };
 
+//Check to see if the user has an email address. this gets called before password resets.
 middleware.UserEmailNotNull = (req,res,next)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(!foundUser.email){
@@ -140,12 +153,13 @@ middleware.UserEmailNotNull = (req,res,next)=>{
     })
 };
 
+//verifies that the batch._id being used to make a request is a valid batch.
 middleware.BatchIsReal = (req,res,next)=>{
     Batch.findById(req.params.id, (err, foundBatch)=>{
         if(err || !foundBatch){
             console.log(err);
             console.log('batch could not be found');
-            req.flash('error', 'batch could not be found: ');
+            req.flash('error', 'batch could not be found...');
             res.redirect('back');
         }else{
             next();
@@ -153,6 +167,7 @@ middleware.BatchIsReal = (req,res,next)=>{
     })
 };
 
+//verifies that the item._id being used to make a request is a valid item.
 middleware.ItemIsReal = (req,res,next)=>{
     Item.findById(req.params.itemId, (err, foundItem)=>{
         if(err || !foundItem){
@@ -166,12 +181,13 @@ middleware.ItemIsReal = (req,res,next)=>{
     })
 };
 
+//verifies that the user._id being used to make a request is a valid user.
 middleware.UserIsReal = (req,res,next)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err || !foundUser){
             console.log(err);
             console.log('User not found');
-            req.flash('error', 'User could not be found ' );
+            req.flash('error', 'User could not be found' );
             res.redirect('back');
         }
         else{
@@ -180,6 +196,7 @@ middleware.UserIsReal = (req,res,next)=>{
     })
 };
 
+//verifies that the task._id being used to make a request is a valid task.
 middleware.TaskIsReal = (req,res,next)=>{
     Task.findById(req.params.id, (err,foundTask)=>{
         if(err || !foundTask){
@@ -193,6 +210,7 @@ middleware.TaskIsReal = (req,res,next)=>{
     })
 };
 
+//verifies that the group._id being used to make a request is a valid group.
 middleware.GroupIsReal = (req,res,next)=>{
     Group.findById(req.params.id, (err,foundGroup)=>{
         if(err || !foundGroup){
@@ -206,6 +224,14 @@ middleware.GroupIsReal = (req,res,next)=>{
     })
 };
 
+//Since there are three possible urls to make a task user,batch,and item this method verifies that the ._ids being used are valid
+//standar url: tasks/:type/:primaryId/:secondaryId?/new
+//task = user: /user/:primaryId/new
+    //validates the user._id (primaryId)
+//task = item: /item/:primaryId/:secondaryId/new
+    //validates the batch._id (primaryId) and the item._id (secondaryId)
+//task = batch: /item/:primaryId/:secondaryId/new
+    //validates the batch._id (primaryId)
 middleware.VerifyNewAndCreateTask = (req,res,next)=>{
     switch (req.params.type) {
         case 'user':

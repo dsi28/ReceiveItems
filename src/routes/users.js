@@ -7,8 +7,11 @@ Task = require('../models/task');
 
     //routes for:  /users
 
-//show
-router.get('/:id', middleware.VerifyLoggedUser, middleware.UserIsReal, (req,res)=>{
+//show render users/show
+router.get('/:id', 
+middleware.VerifyLoggedUser, 
+middleware.UserIsReal, 
+(req,res)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){
             console.log(err);
@@ -44,8 +47,12 @@ router.get('/:id', middleware.VerifyLoggedUser, middleware.UserIsReal, (req,res)
     })
 });
 
-// edit
-router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.UserIsReal, middleware.OwnerOrAdminUser, (req,res)=>{
+//edit render user/edit
+router.get('/:id/edit', 
+middleware.VerifyLoggedUser, 
+middleware.UserIsReal, 
+middleware.OwnerOrAdminUser, 
+(req,res)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){
             console.log(err);
@@ -57,8 +64,12 @@ router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.UserIsReal, midd
     })
 });
 
-//update route
-router.put('/:id', middleware.VerifyLoggedUser,  middleware.UserIsReal, middleware.OwnerOrAdminUser, (req,res)=>{
+//update 
+router.put('/:id', 
+middleware.VerifyLoggedUser, 
+middleware.UserIsReal, 
+middleware.OwnerOrAdminUser, 
+(req,res)=>{
     User.findById(req.params.id, (err,foundUser)=>{
         if(err){
             console.log(err);
@@ -104,7 +115,12 @@ router.put('/:id', middleware.VerifyLoggedUser,  middleware.UserIsReal, middlewa
     })
 });
 
-router.delete('/:id', middleware.VerifyLoggedUser, middleware.UserIsReal, middleware.ValidateUserRole,(req,res)=>{
+//delete
+router.delete('/:id', 
+middleware.VerifyLoggedUser, 
+middleware.UserIsReal, 
+middleware.ValidateUserRole,
+(req,res)=>{
     User.findByIdAndDelete(req.params.id, (err,userToDelete)=>{
         if(err){
             console.log(err);

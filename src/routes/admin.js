@@ -5,10 +5,14 @@ Group = require('../models/group'),
 middleware = require('../middleware'),
 Task = require('../models/task');
 
-
     //routes for : '/admin' 
+
 //show
-router.get('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
+//finds user then populates admin, user, group, and task lists
+router.get('/', 
+middleware.VerifyLoggedUser, 
+middleware.ValidateUserRole, 
+(req,res)=>{
     Group.findOne({name: 'standard'})
     .populate('members')
     .exec(async (err,foundUserList)=>{

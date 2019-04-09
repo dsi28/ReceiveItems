@@ -10,8 +10,10 @@ Comment = require('../models/comment');
 
     //routes for :  '/tasks'
 
-// task show route
-router.get('/:id', middleware.TaskIsReal, (req,res)=>{
+//show render task/show
+router.get('/:id', 
+middleware.TaskIsReal, 
+(req,res)=>{
     Task.findById(req.params.id)
     .populate('createdBy')
     .populate('comments')
@@ -37,6 +39,12 @@ router.get('/:id', middleware.TaskIsReal, (req,res)=>{
 });
 
 // new: As of now only items tasks will have two ids
+//task = user: /user/:primaryId/new
+    // user._id = primaryId
+//task = item: /item/:primaryId/:secondaryId/new
+    //batch._id = primaryId and item._id = secondaryId
+//task = batch: /item/:primaryId/:secondaryId/new
+    // batch._id = primaryId
 router.get('/:type/:primaryId/:secondaryId?/new', 
 middleware.VerifyLoggedUser, 
 middleware.VerifyNewAndCreateTask, 
@@ -81,7 +89,13 @@ async(req,res)=>{
     }
 });
 
-//create route 
+//create
+//task = user: /user/:primaryId
+    // user._id = primaryId
+//task = item: /item/:primaryId/:secondaryId
+    //batch._id = primaryId and item._id = secondaryId
+//task = batch: /item/:primaryId/:secondaryId
+    // batch._id = primaryId  
 router.post('/:type/:primaryId/:secondaryId?', 
 middleware.VerifyLoggedUser, 
 middleware.VerifyNewAndCreateTask, 
@@ -118,8 +132,12 @@ async (req,res)=>{
 });
 
 
-//task edit route
-router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.TaskIsReal, middleware.OwnerOrAdminTask, (req,res)=>{
+//edit render tasks/edit
+router.get('/:id/edit', 
+middleware.VerifyLoggedUser, 
+middleware.TaskIsReal, 
+middleware.OwnerOrAdminTask, 
+(req,res)=>{
     Task.findById(req.params.id)
     .populate('createdBy')
     .populate('for')
@@ -147,7 +165,12 @@ router.get('/:id/edit', middleware.VerifyLoggedUser, middleware.TaskIsReal, midd
     })
 });
 
-router.put('/:id', middleware.VerifyLoggedUser, middleware.TaskIsReal, middleware.OwnerOrAdminTask, (req,res)=>{
+//update
+router.put('/:id', 
+middleware.VerifyLoggedUser, 
+middleware.TaskIsReal, 
+middleware.OwnerOrAdminTask, 
+(req,res)=>{
     Task.findByIdAndUpdate(req.params.id, req.body.task, (err,editTask)=>{
         if(err){
             console.log(err);
@@ -164,7 +187,12 @@ router.put('/:id', middleware.VerifyLoggedUser, middleware.TaskIsReal, middlewar
     })
 });
 
-router.delete('/:id', middleware.VerifyLoggedUser, middleware.TaskIsReal, middleware.ValidateUserRole, (req,res)=>{
+//delete
+router.delete('/:id', 
+middleware.VerifyLoggedUser, 
+middleware.TaskIsReal, 
+middleware.ValidateUserRole, 
+(req,res)=>{
     Task.findByIdAndDelete(req.params.id, (err, deletedTask)=>{
         if(err){
             console.log(err);
@@ -174,7 +202,7 @@ router.delete('/:id', middleware.VerifyLoggedUser, middleware.TaskIsReal, middle
             Comment.deleteMany({_id: {$in: deletedTask.comments}}, (err,deletedItems)=>{
                 if(err){
                     console.log(err);
-                    req.flash('error', err);
+                    req.flash('error', err.message);
                     res.redirect('back');
                 }else{
                     req.flash('success', 'Task deleted!');

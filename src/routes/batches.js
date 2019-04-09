@@ -4,10 +4,9 @@ Batch = require('../models/batch'),
 Item = require('../models/item'),
 middleware = require('../middleware');
 
-
     // routes for :   batches/
 
-
+//renders batches/index view
 router.get('/', (req, res)=>{
     Batch.find({}, (err,foundBatches)=>{
         if(err){
@@ -19,11 +18,12 @@ router.get('/', (req, res)=>{
     })
 });
 
-// new
+// new render batches/new view
 router.get('/new', middleware.VerifyLoggedUser, middleware.ValidateUserRole,(req, res)=>{
     res.render('batches/new');
 });
 
+// create creates a batch using input fromnew form
 router.post('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Batch.create({name: req.body.name}, (err,createdBatch)=>{
         if(err){
@@ -38,8 +38,9 @@ router.post('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,
             res.redirect('/batches/'+createdBatch._id);
         }
     });
-})
+});
 
+// edit render batches/edit view
 router.get('/:id/edit', middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, middleware.OwnerOrAdminBatch, (req,res)=>{
     Batch.findById(req.params.id, (err,foundBatch)=>{
         if(err){
@@ -52,6 +53,7 @@ router.get('/:id/edit', middleware.BatchIsReal, middleware.VerifyLoggedUser, mid
     })
 });
 
+//update: updates batch
 router.put('/:id', middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Batch.findByIdAndUpdate(req.params.id, req.body.batch, (err,updatedBatch)=>{
         if(err){
@@ -65,6 +67,7 @@ router.put('/:id', middleware.BatchIsReal, middleware.VerifyLoggedUser, middlewa
     })
 });
 
+//show renders batches/show view
 router.get('/:id', middleware.BatchIsReal, (req,res)=>{
     Batch.findById(req.params.id).populate('items').exec((err,foundBatch)=>{
         if(err){
@@ -77,6 +80,7 @@ router.get('/:id', middleware.BatchIsReal, (req,res)=>{
     })
 });
 
+//deletes batch
 router.delete('/:id',middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
     Batch.findByIdAndDelete(req.params.id, (err, deleteBatch)=>{
         if(err){

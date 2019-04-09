@@ -6,8 +6,9 @@ multer = require('multer'),
 middleware = require('../middleware'),
 fs = require('fs');
 
-
-//multer config
+//multer config: 
+//destination is the default saved file location for files
+//filename is the default filenaming convnetion. 
 const multerStorageConfig = multer.diskStorage({
     destination: (req,file,cb)=>{
         cb(null, 'public/images/');
@@ -16,12 +17,15 @@ const multerStorageConfig = multer.diskStorage({
         cb(null, Date.now()+'-'+ file.originalname)
     }
 });
+//create multer object
 const upload = multer({storage: multerStorageConfig});
 
     // routes for :   /batches/:id/items
 
-//new
-router.get('/new', middleware.VerifyLoggedUser,(req,res)=>{
+//new render item/new view
+router.get('/new', 
+middleware.VerifyLoggedUser,
+(req,res)=>{
     Batch.findById(req.params.id, (err,foundBatch)=>{
         if(err){
             console.log(err);
@@ -32,7 +36,7 @@ router.get('/new', middleware.VerifyLoggedUser,(req,res)=>{
     })
 });
 
-//show
+//show renders items/show view
 router.get('/:itemId', 
 middleware.VerifyLoggedUser,
 middleware.BatchIsReal, 
@@ -43,6 +47,7 @@ middleware.ItemIsReal,
     })
 });
 
+//create creates item and adds it to batch items array
 router.post('/',middleware.VerifyLoggedUser, upload.single('image'), (req,res)=>{
     if(req.file){
         req.body.item.imageLocation = '\\'+ req.file.path;
@@ -58,7 +63,12 @@ router.post('/',middleware.VerifyLoggedUser, upload.single('image'), (req,res)=>
     })
 });
 
-router.get('/:itemId/edit', middleware.VerifyLoggedUser, middleware.BatchIsReal, middleware.ItemIsReal, (req,res)=>{
+//edit render items/edit view
+router.get('/:itemId/edit', 
+middleware.VerifyLoggedUser, 
+middleware.BatchIsReal, 
+middleware.ItemIsReal, 
+(req,res)=>{
     Item.findById(req.params.itemId, (err, foundItem)=>{
         Batch.findById(req.params.id, (err,foundBatch)=>{
             res.render('items/edit', {item: foundItem, batch: foundBatch});            
@@ -66,7 +76,13 @@ router.get('/:itemId/edit', middleware.VerifyLoggedUser, middleware.BatchIsReal,
     })
 });
 
-router.put('/:itemId', middleware.VerifyLoggedUser, middleware.BatchIsReal, middleware.ItemIsReal, upload.single('image'), (req,res,next)=>{
+//update updates item
+router.put('/:itemId', 
+middleware.VerifyLoggedUser, 
+middleware.BatchIsReal, 
+middleware.ItemIsReal, 
+upload.single('image'), 
+(req,res,next)=>{
     Item.findByIdAndUpdate(req.params.itemId, req.body.item, (err,updatedItem)=>{
         if(req.file){
             middleware.DeleteImage(req,res,next);
@@ -85,7 +101,13 @@ router.put('/:itemId', middleware.VerifyLoggedUser, middleware.BatchIsReal, midd
     })
 });
 
-router.delete('/:itemId', middleware.VerifyLoggedUser, middleware.BatchIsReal, middleware.ItemIsReal, middleware.DeleteImage, (req,res)=>{
+//delete deletes item
+router.delete('/:itemId', 
+middleware.VerifyLoggedUser, 
+middleware.BatchIsReal, 
+middleware.ItemIsReal, 
+middleware.DeleteImage, 
+(req,res)=>{
     Item.findByIdAndDelete(req.params.itemId, (err,deletedItem)=>{
         req.flash('success', 'Item Deleted!');
         res.redirect('/batches/'+req.params.id);

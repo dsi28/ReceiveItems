@@ -8,13 +8,14 @@ async = require('async'),
 nodemailer = require('nodemailer'),
 crypto = require('crypto');
 
-
     //auth routes: '/auth'
 
-//
+//show register view
 router.get('/register', (req,res)=>{
     res.render('auth/register');
 });
+
+//register/creates user then logsin the user
 router.post('/register', (req,res)=>{
     let user = {
         username: req.body.username,
@@ -41,10 +42,12 @@ router.post('/register', (req,res)=>{
     })
 });
 
+//shows the login page
 router.get('/login', (req,res)=>{
     res.render('auth/login');
 });
 
+//logs user in
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/batches',
     failureRedirect: '/auth/login',
@@ -53,20 +56,18 @@ router.post('/login', passport.authenticate('local', {
 }), (req,res)=>{
 });
 
+//logs user out
 router.get('/logout', (req,res)=>{
     req.logOut();
     req.flash('success', 'You have been successfully logged out!');
     res.redirect('/batches');
 });
 
-//// pasword reset 
+//// pasword reset routes
 
-router.get('/:id/passwordReset', middleware.VerifyLoggedUser, middleware.OwnerOrAdminUser, middleware.UserEmailNotNull, (req,res)=>{
-    console.log('outdated route...');
-    req.flash('error', 'Remove route');
-});
-
-//get password reset
+//send password reset email
+//creates random token and adds it to the user along with the exp date
+//once token has been created an email is sent to the users email address
 router.get('/:id/reset', 
     middleware.UserNotNull,
     middleware.OwnerOrAdminUser,
@@ -83,11 +84,11 @@ router.get('/:id/reset',
                 },
                 function(token, done) {
                     if (!foundUser) {
-                        //req.flash('error', 'No account with that email address exists.');
+                        req.flash('error', 'No account with that email address exists.');
                         return res.redirect('/users/'+foundUser._id);
                     }
                     foundUser.resetPasswordToken = token;
-                    foundUser.resetPasswordExpires = Date.now() + 1800000; // 30 mins
+                    foundUser.resetPasswordExpires = Date.now() + 1800000; // sets token expiration time to 30 mins from now
                     foundUser.save(function(err) {
                     done(err, token, foundUser);
                     });
@@ -124,6 +125,7 @@ router.get('/:id/reset',
 });
 
 //get password reset form with link from email
+//if the token is valid render password reset form 
 router.get('/reset/:token', (req, res)=>{
 	User.findOne({ 
         resetPasswordToken: req.params.token, 
@@ -138,8 +140,10 @@ router.get('/reset/:token', (req, res)=>{
 	})
 });
 
-
 //update passsword
+//verifies token and that the inputed from form match
+//sends email notifying user that password has been updated.
+//logs user out and redirects to login page
 router.post('/reset/:token', (req,res)=>{
 	async.waterfall([
         function(done) {
@@ -152,13 +156,13 @@ router.post('/reset/:token', (req,res)=>{
                 }
                 if(req.body.password === req.body.confirm) {
                     user.setPassword(req.body.password, function(err) {
-                    user.resetPasswordToken = undefined;
-                    user.resetPasswordExpires = undefined;
-                    user.save(function(err) {
-                        req.logIn(user, function(err) {
-                            done(err, user);
+                        user.resetPasswordToken = undefined;
+                        user.resetPasswordExpires = undefined;
+                        user.save(function(err) {
+                            req.logIn(user, function(err) {
+                                done(err, user);
+                            });
                         });
-                    });
                     })
                 } else {
                     req.flash("error", "Passwords do not match");
@@ -193,6 +197,5 @@ router.post('/reset/:token', (req,res)=>{
         req.flash('success', 'Login with your new password!');
         res.redirect('/auth/login');
 });
-//end auth routes
 
 module.exports= router;

@@ -7,6 +7,7 @@ middleware = require('../middleware');
 
     //routes for : /tasks/:id/comments
 
+//new renders comment/new view
 router.get('/new', middleware.VerifyLoggedUser, (req,res)=>{
     Task.findById(req.params.id, (err,foundTask)=>{
         if(err){
@@ -19,6 +20,7 @@ router.get('/new', middleware.VerifyLoggedUser, (req,res)=>{
     })
 });
 
+//create creates comment and adds it to the comments array of its task
 router.post('/', middleware.VerifyLoggedUser, (req,res)=>{
     Task.findById(req.params.id, (err,foundTask)=>{
         if(err){
@@ -44,6 +46,7 @@ router.post('/', middleware.VerifyLoggedUser, (req,res)=>{
     })
 });
 
+//edit renders comment/edit view
 router.get('/:commentId/edit', middleware.VerifyLoggedUser, middleware.OwnerOrAdminComment, (req,res)=>{
     Task.findById(req.params.id, (err,foundTask)=>{
         if(err){
@@ -64,6 +67,7 @@ router.get('/:commentId/edit', middleware.VerifyLoggedUser, middleware.OwnerOrAd
     })
 });
 
+//update  updates comment
 router.put('/:commentId', middleware.VerifyLoggedUser, middleware.OwnerOrAdminComment,(req,res)=>{
     Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err,UpdatedComment)=>{
         if(err){
@@ -77,6 +81,7 @@ router.put('/:commentId', middleware.VerifyLoggedUser, middleware.OwnerOrAdminCo
     })
 });
 
+//delete deletes comment
 router.delete('/:commentId', middleware.VerifyLoggedUser, middleware.OwnerOrAdminComment, (req,res)=>{
     Comment.findByIdAndDelete(req.params.commentId, (err)=>{
         if(err){

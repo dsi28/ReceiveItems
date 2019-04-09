@@ -69,7 +69,7 @@ router.get('/logout', (req,res)=>{
 //creates random token and adds it to the user along with the exp date
 //once token has been created an email is sent to the users email address
 router.get('/:id/reset', 
-    middleware.UserNotNull,
+    middleware.UserIsReal,
     middleware.OwnerOrAdminUser,
 	middleware.UserEmailNotNull,
 	(req, res)=>{

@@ -126,20 +126,6 @@ middleware.OwnerOrAdminBatch = (req,res,next)=>{
     })
 };
 
-//verifies that the user._id being used to make a request is a valid user.
-middleware.UserNotNull = (req,res,next)=>{
-    User.findById(req.params.id, (err,foundUser)=>{
-        if(err || !foundUser){
-            console.log(err);
-            console.log('User not found');
-            req.flash('error', 'User not found ' );
-            res.redirect('back');
-        }else{
-            next();
-        }
-    })
-};
-
 //Check to see if the user has an email address. this gets called before password resets.
 middleware.UserEmailNotNull = (req,res,next)=>{
     User.findById(req.params.id, (err,foundUser)=>{
@@ -180,7 +166,19 @@ middleware.ItemIsReal = (req,res,next)=>{
         }
     })
 };
-
+// //verifies that the user._id being used to make a request is a valid user.
+// middleware.UserNotNull = (req,res,next)=>{
+//     User.findById(req.params.id, (err,foundUser)=>{
+//         if(err || !foundUser){
+//             console.log(err);
+//             console.log('User not found');
+//             req.flash('error', 'User not found ' );
+//             res.redirect('back');
+//         }else{
+//             next();
+//         }
+//     })
+// };
 //verifies that the user._id being used to make a request is a valid user.
 middleware.UserIsReal = (req,res,next)=>{
     User.findById(req.params.id, (err,foundUser)=>{

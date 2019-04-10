@@ -11,12 +11,16 @@ crypto = require('crypto');
     //auth routes: '/auth'
 
 //show register view
-router.get('/register', (req,res)=>{
+router.get('/register', 
+middleware.AdminOrNewUser, 
+(req,res)=>{
     res.render('auth/register');
 });
 
 //register/creates user then logsin the user
-router.post('/register', (req,res)=>{
+router.post('/register', 
+middleware.AdminOrNewUser, 
+(req,res)=>{
     let user = {
         username: req.body.username,
         email: req.body.email,
@@ -34,10 +38,15 @@ router.post('/register', (req,res)=>{
                     roleGroup.members.push(newUser);
                     roleGroup.save();
                 });
-                passport.authenticate('local')(req,res,()=>{
-                    req.flash('success', 'Welcome to the Receiving App '+ newUser.username);
-                    res.redirect('/');
-                });
+                if(req.isAuthenticated() && req.user.role == 'admin'){
+                    req.flash('success', 'User created!');
+                    res.redirect('/users/'+newUser._id);
+                }else{
+                    passport.authenticate('local')(req,res,()=>{
+                        req.flash('success', 'Welcome to the Receiving App '+ newUser.username);
+                        res.redirect('/');
+                    });
+                }
             }
     })
 });

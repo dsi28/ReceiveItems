@@ -166,19 +166,6 @@ middleware.ItemIsReal = (req,res,next)=>{
         }
     })
 };
-// //verifies that the user._id being used to make a request is a valid user.
-// middleware.UserNotNull = (req,res,next)=>{
-//     User.findById(req.params.id, (err,foundUser)=>{
-//         if(err || !foundUser){
-//             console.log(err);
-//             console.log('User not found');
-//             req.flash('error', 'User not found ' );
-//             res.redirect('back');
-//         }else{
-//             next();
-//         }
-//     })
-// };
 //verifies that the user._id being used to make a request is a valid user.
 middleware.UserIsReal = (req,res,next)=>{
     User.findById(req.params.id, (err,foundUser)=>{
@@ -282,5 +269,14 @@ middleware.VerifyNewAndCreateTask = (req,res,next)=>{
             break;
     }
 };
+
+middleware.AdminOrNewUser = (req,res,next)=>{
+    if(req.isAuthenticated() && req.user.role != 'admin'){
+        req.flash('error', 'You do not have permission to create a user... Please log out for so that a new user can register');
+        res.redirect('/batches');
+    }else{
+        next();
+    }
+}
 
 module.exports = middleware;

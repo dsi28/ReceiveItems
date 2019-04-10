@@ -19,21 +19,27 @@ router.get('/', (req, res)=>{
 });
 
 // new render batches/new view
-router.get('/new', middleware.VerifyLoggedUser, middleware.ValidateUserRole,(req, res)=>{
+router.get('/new', 
+middleware.VerifyLoggedUser, 
+middleware.ValidateUserRole,
+(req, res)=>{
     res.render('batches/new');
 });
 
 // create creates a batch using input fromnew form
-router.post('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
-    Batch.create({name: req.body.name}, (err,createdBatch)=>{
+router.post('/', 
+middleware.VerifyLoggedUser, 
+middleware.ValidateUserRole, 
+(req,res)=>{
+    Batch.create(req.body.batch, (err,createdBatch)=>{
         if(err){
             console.log(err);
             req.flash('error', err);
             res.redirect('back');
         }else{
-            createdBatch.createdBy.username = req.user.username;
-            createdBatch.createdBy.id = req.user.id;
-        createdBatch.save();
+            createdBatch.createdBy.username = createdBatch.updatedBy.username = req.user.username;
+            createdBatch.createdBy.id = createdBatch.updatedBy.id = req.user.id;
+            createdBatch.save();
             req.flash('success', 'Batch has been created!');
             res.redirect('/batches/'+createdBatch._id);
         }
@@ -41,7 +47,12 @@ router.post('/', middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,
 });
 
 // edit render batches/edit view
-router.get('/:id/edit', middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, middleware.OwnerOrAdminBatch, (req,res)=>{
+router.get('/:id/edit', 
+middleware.BatchIsReal, 
+middleware.VerifyLoggedUser, 
+middleware.ValidateUserRole, 
+middleware.OwnerOrAdminBatch, 
+(req,res)=>{
     Batch.findById(req.params.id, (err,foundBatch)=>{
         if(err){
             console.log(err);
@@ -54,13 +65,21 @@ router.get('/:id/edit', middleware.BatchIsReal, middleware.VerifyLoggedUser, mid
 });
 
 //update: updates batch
-router.put('/:id', middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
-    Batch.findByIdAndUpdate(req.params.id, req.body.batch, (err,updatedBatch)=>{
+router.put('/:id', 
+middleware.BatchIsReal, 
+middleware.VerifyLoggedUser, 
+middleware.ValidateUserRole, 
+(req,res)=>{
+    Batch.findOneAndUpdate({_id: req.params.id}, req.body.batch, (err,updatedBatch)=>{
         if(err){
             console.log(err);
             req.flash('error', err);
             res.redirect('back');
         }else{
+            updatedBatch.updatedBy.username = req.user.username;
+            updatedBatch.updatedBy.id = req.user;
+            updatedBatch.updatedDate = Date.now();
+            updatedBatch.save();
             req.flash('success', 'Updated batch!');
             res.redirect('/batches/'+updatedBatch.id);
         }
@@ -68,11 +87,13 @@ router.put('/:id', middleware.BatchIsReal, middleware.VerifyLoggedUser, middlewa
 });
 
 //show renders batches/show view
-router.get('/:id', middleware.BatchIsReal, (req,res)=>{
+router.get('/:id', 
+middleware.BatchIsReal, 
+(req,res)=>{
     Batch.findById(req.params.id).populate('items').exec((err,foundBatch)=>{
         if(err){
             console.log(err);
-            req.flash('error', err);
+            req.flash('error', err.message);
             res.redirect('back');
         }else{
             res.render('batches/show', {batch: foundBatch});
@@ -81,7 +102,11 @@ router.get('/:id', middleware.BatchIsReal, (req,res)=>{
 });
 
 //deletes batch
-router.delete('/:id',middleware.BatchIsReal, middleware.VerifyLoggedUser, middleware.ValidateUserRole, (req,res)=>{
+router.delete('/:id',
+middleware.BatchIsReal, 
+middleware.VerifyLoggedUser, 
+middleware.ValidateUserRole, 
+(req,res)=>{
     Batch.findByIdAndDelete(req.params.id, (err, deleteBatch)=>{
         if(err){
             console.log(err);

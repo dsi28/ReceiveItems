@@ -6,7 +6,23 @@ const batchSchema = new mongoose.Schema({
         default: Date.now,
         type: Date
     },
+    updatedDate:{
+        default: Date.now,
+        type: Date
+    },
+    desc: String,
+    status: {
+        type:String,
+        default:'open'
+    },
     createdBy: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        username: String
+    },
+    updatedBy: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'

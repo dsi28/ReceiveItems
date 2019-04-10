@@ -5,8 +5,12 @@
         <div class='form-setup'>
             <form method='POST' action='/batches'>
                 <div class='form-group'>
-                    <label for='name'>Batch Name</label>
-                    <input class='form-control' type='text' name='name' id='name' placeholder='batch name'>
+                    <label for='name'>Name</label>
+                    <input class='form-control' type='text' name='batch[name]' id='name' placeholder='batch name'>
+                </div>
+                <div class='form-group'>
+                    <label for='desc'>Description</label>
+                    <input class='form-control' type='text' name='batch[desc]' id='desc' placeholder='description...'>
                 </div>
                 <input class='btn btn-success btn-block' type='submit' value='Create'>
             </form>

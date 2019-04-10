@@ -1,9 +1,18 @@
 <% include ../partials/header.ejs%>
 <div class='container default-page-top-margin'>
     <div class='row'>
-        <div class='col-md-3 text-center'>
-            <h1 ><%=batch.name%></h1>
-            <p>Created by <%=batch.createdBy.username%> (<%=moment(batch.createdDate).format('M/D/YY')%>)</p>
+        <div class='col-md-4'>
+            <h1 class='text-center'><%=batch.name%><span class='bold-item'> <%=batch.status%></span></h1>
+            <label for='created'>Created By</label>
+            <input class='form-control default-item-bottom-margin' id='created' value='<%=batch.createdBy.username%>' readonly>
+            <label for='date'>Created Date</label>
+            <input class='form-control default-item-bottom-margin' id='date' value='<%=moment(batch.date).format('MMM DD YYYY H:m:s')%>' readonly>
+            <label for='desc'>Description</label>
+            <textarea class='form-control default-item-bottom-margin' id='desc' readonly><%=batch.desc%></textarea>
+            <label for='updatedBy'>Updated By</label>
+            <input class='form-control default-item-bottom-margin' id='updatedBy' value='<%=batch.updatedBy.username%>' readonly>
+            <label for='date'>Updated Date</label>
+            <input class='form-control default-item-bottom-margin' id='updateDate' value='<%=moment(batch.updatedDate).format('MMM DD YYYY H:m:s')%>' readonly>
             <div class='container'>
                 <a class='btn btn-success btn-block' href='/batches/<%=batch.id%>/items/new'>New Item</a>
                 <a class='btn btn-primary btn-block default-item-top-margin' href='/tasks/batch/<%=batch.id%>/new%>'>New Task</a>
@@ -12,10 +21,19 @@
                     <form method='POST' action='/batches/<%=batch.id%>?_method=DELETE'>
                         <input class='btn btn-danger btn-block default-item-top-margin' type='submit' value='Delete Batch'>
                     </form>
+                    <form class='button-top-margin' method='POST' action='/batches/<%=batch.id%>?_method=PUT'>
+                        <%if(batch.status == 'open'){%>
+                            <input type='hidden' name='batch[status]' value='closed'>
+                            <input type='submit' class='btn btn-outline-danger btn-block' value='close'>
+                        <%}else{%>
+                            <input type='hidden' name='batch[status]' value='open'>
+                            <input type='submit' class='btn btn-outline-success btn-block' value='open'>
+                        <%}%>
+                    </form>
                 <%}%>
             </div>
         </div>
-            <div class='col-md-9'>
+            <div class='col-md-8'>
                 <div class='container'>
                 <hr>
                 <h2>Items</h2>

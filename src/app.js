@@ -73,4 +73,4 @@ app.use('/tasks/:id/comments', commentRouter);
 app.use('/tasks', taskRouter);
 
 
-app.listen(3000,()=>{console.log('App is alive...')})
+app.listen(process.env.PORT || 3000,()=>{console.log('App is alive...')})

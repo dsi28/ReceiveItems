@@ -48,18 +48,36 @@ middleware.ItemIsReal,
 });
 
 //create creates item and adds it to batch items array
-router.post('/',middleware.VerifyLoggedUser, upload.single('image'), (req,res)=>{
+router.post('/',
+middleware.VerifyLoggedUser, 
+upload.single('image'), 
+(req,res)=>{
     if(req.file){
         req.body.item.imageLocation = '\\'+ req.file.path;
         req.body.item.imageDisplay = req.file.path.replace('public', '');
     }
     Item.create(req.body.item, (err, createdItem)=>{
-        Batch.findById(req.params.id, (err,foundBatch)=>{
-            foundBatch.items.push(createdItem);
-            foundBatch.save();
-            req.flash('success', 'Item created!');
-            res.redirect('/batches/'+foundBatch.id)
-        })
+        if(err){
+            console.log(err);
+            req.flash('err', err.message);
+            res.redirect('back');
+        }else{
+            createdItem.createdBy.id = createdItem.updatedBy.id = req.user;
+            createdItem.createdBy.username = createdItem.updatedBy.username = req.user.username;
+            createdItem.save();
+            Batch.findById(req.params.id, (err,foundBatch)=>{
+                if(err){
+                    console.log(err);
+                    req.flash('err', err.message);
+                    res.redirect('back');
+                }else{
+                    foundBatch.items.push(createdItem);
+                    foundBatch.save();
+                    req.flash('success', 'Item created!');
+                    res.redirect('/batches/'+foundBatch.id);
+                }
+            })
+        }
     })
 });
 
@@ -84,17 +102,20 @@ middleware.ItemIsReal,
 upload.single('image'), 
 (req,res,next)=>{
     Item.findByIdAndUpdate(req.params.itemId, req.body.item, (err,updatedItem)=>{
-        if(req.file){
-            middleware.DeleteImage(req,res,next);
-            updatedItem.imageLocation = '\\'+ req.file.path;
-            updatedItem.imageDisplay = req.file.path.replace('public', '');
-            updatedItem.save();
-        }
         if(err){
             console.log(err);
             req.flash('error', err);
             res.redirect('back');
         }else{
+            if(req.file){
+                middleware.DeleteImage(req,res,next);
+                updatedItem.imageLocation = '\\'+ req.file.path;
+                updatedItem.imageDisplay = req.file.path.replace('public', '');
+            }
+            updatedItem.updatedBy.username = req.user.username;
+            updatedItem.updatedBy.id = req.user;
+            updatedItem.updatedDate = Date.now();
+            updatedItem.save();
             req.flash('success', 'Item has been updated!');
             res.redirect('/batches/'+req.params.id);
         }

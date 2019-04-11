@@ -28,7 +28,7 @@ app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname+'/public'));
 app.use(flash());
-mongoose.connect(process.env.DATABASE_URL_DEV, { useNewUrlParser: true });
+mongoose.connect(process.env.DATABASE_URL_PRODUCTION, { useNewUrlParser: true });
 //mongoose.connect('mongodb://localhost:27017/receive_app', { useNewUrlParser: true });
 app.use(expressSanitizer());
 

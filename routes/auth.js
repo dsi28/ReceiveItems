@@ -31,7 +31,7 @@ middleware.AdminOrNewUser,
         (err,newUser)=>{
             if(err){
                 console.log(err);
-                req.flash('error', err);
+                req.flash('error', err.message);
                 res.redirect('back');
             }else{
                 Group.findOne({name: newUser.role}, (err,roleGroup)=>{

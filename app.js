@@ -27,8 +27,6 @@ app.use(methodOverride('_method'));
 app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname+'/public'));
-console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-console.log(__dirname);
 app.use(flash());
 mongoose.connect('mongodb+srv://dsi28:9mssspcizrMvJpU7@receiveappcluster-ewztl.mongodb.net/test?retryWrites=true', { useNewUrlParser: true });
 //mongoose.connect('mongodb://localhost:27017/receive_app', { useNewUrlParser: true });
@@ -43,7 +41,7 @@ app.locals.moment = require('moment');
 //auth config
     //express-session config
 app.use(require('express-session')({
-    secret: 'secretUntilAfterDeployement123#$!',
+    secret: process.env.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));

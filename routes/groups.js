@@ -34,10 +34,18 @@ middleware.ValidateUserRole,
             res.redirect('back');
         }else{
             try{
-                for (const uId of req.body.uList) {
-                    await User.findById(uId, (err, foundUser)=>{
+                console.log(typeof(req.body.uList));
+                if(typeof(req.body.uList) == 'string'){
+                    await User.findById(req.body.uList, (err, foundUser)=>{
                         createdGroup.members.push(foundUser);
                     });
+                }else{
+                    for (const uId of req.body.uList) {
+                        await User.findById(uId, (err, foundUser)=>{
+                            console.log(uId);
+                            createdGroup.members.push(foundUser);
+                        });
+                    }
                 }
                 await createdGroup.save();
                 req.flash('success', 'Group Created!');

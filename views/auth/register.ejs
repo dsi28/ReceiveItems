@@ -26,7 +26,11 @@
                         <button class='btn btn-lg btn-primary btn-block' type='submit'>Sign up</button>
                     <%}%>
             </form>
-            <a href='/auth/login'>Log in instead!</a>
+            <%if(currentUser && currentUser.role=='admin'){%>
+                <a href='javascript:history.back()'>Back!</a>
+            <%}else{%>
+                <a href='/auth/login'>Log in instead!</a>
+            <%}%>
         </div>
     </div>
 </div>

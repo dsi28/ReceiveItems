@@ -40,7 +40,7 @@ app.locals.moment = require('moment');
 //auth config
     //express-session config
 app.use(require('express-session')({
-    secret: process.env.EXPRESS_SESSION_SECRET,
+    secret: 'secretUntilAfterDeployement123#$!',
     resave: false,
     saveUninitialized: false
 }));
